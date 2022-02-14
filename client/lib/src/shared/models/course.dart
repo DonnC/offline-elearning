@@ -1,4 +1,4 @@
-import 'content.dart';
+import 'index.dart';
 
 /// main course | subject
 ///

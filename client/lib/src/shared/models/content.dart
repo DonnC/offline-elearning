@@ -1,4 +1,4 @@
-import 'course_content.dart';
+import 'index.dart';
 
 /// main content section
 ///
