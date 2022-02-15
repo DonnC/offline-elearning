@@ -42,6 +42,7 @@ dependencies:
   intl: ^0.17.0
   dio: ^4.0.4
   expandable: ^5.0.1
+  styled_widget: ^0.4.0+3
 
 dev_dependencies:
   flutter_test:
