@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:math' as math;
 
 class AppColors {
   static const Color greyishBgColor = Color(0xFFF4F5F6);
@@ -15,4 +16,10 @@ class AppColors {
     const Color(0xFFF2F2FD),
     const Color(0xFFEBF4FC),
   ];
+
+  static Color getRandomColor() {
+    var g = math.Random().nextInt(bgColorSwatches.length);
+
+    return bgColorSwatches[g];
+  }
 }

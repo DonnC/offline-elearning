@@ -7,12 +7,14 @@ class SharedHomeViewCard extends StatelessWidget {
     Key? key,
     required this.icon,
     required this.title,
-    required this.routeTo,
+    this.routeTo = '',
+    this.args,
   }) : super(key: key);
 
   final IconData icon;
   final String title;
   final String routeTo;
+  final Map? args;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class SharedHomeViewCard extends StatelessWidget {
         color: AppColors.whiteColor,
         child: GestureDetector(
           onTap: () {
-            Navigator.pushReplacementNamed(context, routeTo);
+            Navigator.pushNamed(context, routeTo, arguments: args);
           },
           child: Center(
             child: Column(

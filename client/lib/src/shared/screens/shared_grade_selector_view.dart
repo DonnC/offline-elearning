@@ -1,3 +1,4 @@
+import 'package:client/src/constants/index.dart';
 import 'package:client/src/shared/widgets/shared_home_view_card.dart';
 import 'package:flutter/material.dart';
 
@@ -14,32 +15,38 @@ class _SharedGradeSelectorViewState extends State<SharedGradeSelectorView> {
     const SharedHomeViewCard(
       icon: Icons.folder,
       title: 'Form 1',
-      routeTo: '',
+      routeTo: sharedPerFormScreen,
+      args: {'grade_code': 'f1'},
     ),
     const SharedHomeViewCard(
       icon: Icons.folder,
       title: 'Form 2',
-      routeTo: '',
+      routeTo: sharedPerFormScreen,
+      args: {'grade_code': 'f2'},
     ),
     const SharedHomeViewCard(
       icon: Icons.folder,
       title: 'Form 3',
-      routeTo: '',
+      routeTo: sharedPerFormScreen,
+      args: {'grade_code': 'f3'},
     ),
     const SharedHomeViewCard(
       icon: Icons.folder,
       title: 'Form 4',
-      routeTo: '',
+      routeTo: sharedPerFormScreen,
+      args: {'grade_code': 'f4'},
     ),
     const SharedHomeViewCard(
       icon: Icons.folder,
       title: 'Form 5',
-      routeTo: '',
+      routeTo: sharedPerFormScreen,
+      args: {'grade_code': 'f5'},
     ),
-    const SharedHomeViewCard(
+    SharedHomeViewCard(
       icon: Icons.folder,
       title: 'Form 6',
-      routeTo: '',
+      routeTo: sharedPerFormScreen,
+      args: Map<String, dynamic>.from({'grade_code': 'f6'}),
     ),
   ];
 
@@ -47,6 +54,14 @@ class _SharedGradeSelectorViewState extends State<SharedGradeSelectorView> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back),
+          ),
+        ),
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 30),
           child: Column(
