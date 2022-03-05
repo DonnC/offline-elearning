@@ -1,129 +1,81 @@
-from typing import List, Optional
+from datetime import datetime
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime
+from sqlalchemy.orm import relationship, backref
 
-from sqlmodel import Field, Relationship, SQLModel
+from app.database import Base
 
-#from .team import *
+# system user
+# e.g Teacher, Admin
+class User(Base):
+    __tablename__ = "users"
 
-class HeroBase(SQLModel):
-    name: str = Field(index=True)
-    secret_name: str
-    age: Optional[int] = Field(default=None, index=True)
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+    created_on = Column(DateTime, server_default=datetime.utcnow)
+    hashed_password = Column(String)
+    is_admin = Column(Boolean, default=False)
+    is_teacher = Column(Boolean, default=True)
 
-    team_id: Optional[int] = Field(default=None, foreign_key="team.id")
+# main course e.g
+# form: form3
+# name: Biology
+# synopsis: In this course, you will learn about Biology and how it is important in our day to day lives for a healthy living
+# description: full description about <course-name>
+# content: [ <content> ]
+class Course(Base):
+    __tablename__ = "courses"
 
-class TeamBase(SQLModel):
-    name: str = Field(index=True)
-    headquarters: str
+    id = Column(Integer, primary_key=True, index=True)
+    # class | form e.g form4, form6, grade3
+    form = Column(String, unique=True, index=True)
+    name = Column(String, unique=True, index=True)
+    created_on = Column(DateTime, server_default=datetime.utcnow)
+    updated_on = Column(DateTime, server_default=datetime.utcnow, onupdate=datetime.utcnow)
+    # full course description
+    description = Column(String, default=None)
+    # short course description
+    synopsis = Column(String, default=None) 
 
-
-class Team(TeamBase, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-
-    heroes: List["Hero"] = Relationship(back_populates="team")
-
-class TeamCreate(TeamBase):
-    pass
-
-class TeamRead(TeamBase):
-    id: int
-
-
-class TeamUpdate(SQLModel):
-    id: Optional[int] = None
-    name: Optional[str] = None
-    headquarters: Optional[str] = None
-
-class HeroRead(HeroBase):
-    id: int
-
-class TeamReadWithHeroes(TeamRead):
-    heroes: List[HeroRead] = []
-
-
-class Hero(HeroBase, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-
-    team: Optional[Team] = Relationship(back_populates="heroes")
-
-class HeroCreate(HeroBase):
-    pass
-
-class HeroUpdate(SQLModel):
-    name: Optional[str] = None
-    secret_name: Optional[str] = None
-    age: Optional[int] = None
-    team_id: Optional[int] = None
+    content = relationship("Content", back_populates="course")
 
 
-class HeroReadWithTeam(HeroRead):
-    team: Optional[TeamRead] = None
+# course content e.g 
+# topic: Introduction
+# description: Who is this for? What are we learning?
+class Content(Base):
+    __tablename__ = "contents"
 
-################################# TEACHER ########################
-class TeacherBase(SQLModel):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    name: str = Field(index=True)
-    created_on: str = Field(default=None)
+    id = Column(Integer, primary_key=True, index=True)
+    # content topic | title
+    topic = Column(String, index=True)
+    # short description about this content
+    description = Column(String)
+    created_on = Column(DateTime, server_default=datetime.utcnow)
+    updated_on = Column(DateTime, server_default=datetime.utcnow, onupdate=datetime.utcnow)
 
-class TeacherRead(TeacherBase):
-    id: int
+    # relationship with Course
+    course_id = Column(Integer, ForeignKey("courses.id"))
+    course = relationship("Course", back_populates="content")
 
-class Teacher(TeacherBase, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
+    # for course-sections
+    sections = relationship("Section", back_populates="content")
 
-class TeacherCreate(TeacherBase):
-    pass
+# course content section e.g
+# title: Plant Reproduction
+# data: < data info >
+class Section(Base):
+    __tablename__ = "sections"
 
-class TeacherUpdate(SQLModel):
-    name: Optional[str] = None
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, index=True)
+    data = Column(String)
 
-# ############################## COURSE-CONTENT-BASE ###########################
-class CourseTopicBase(SQLModel):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    topic: str 
+    created_on = Column(DateTime, server_default=datetime.utcnow)
+    updated_on = Column(DateTime, server_default=datetime.utcnow, onupdate=datetime.utcnow)
 
-class CourseTopic(CourseTopicBase, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    content: List["CourseContent"] = Relationship(back_populates="course_topic")
+    content_id = Column(Integer, ForeignKey("contents.id"))
+    content = relationship("Content", back_populates="sections")
 
-class CourseContentBase(SQLModel):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    name: str = Field(index=True)
-    created_on: str = Field(default=None)
-    title: str
-    content: str = Field(default=None)
-    editor_teacher_id: Optional[int] = Field(default=None, foreign_key="teacher.id")
-    topic_id: Optional[int] = Field(default=None, foreign_key="coursecontent.id")
-    course_topic: Optional[CourseTopic] = Relationship(back_populates="content")
-
-class CourseContentRead(CourseContentBase):
-    id: int
-
-class CourseContent(CourseContentBase, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    teacher: Optional[Teacher] = Relationship()
-
-class CourseContentCreate(CourseContentBase):
-    pass
-
-class CourseContentUpdate(SQLModel):
-    title: Optional[str] = None
-    content: Optional[str] = None
-    editor_teacher_id: Optional[int] = None
-
-############################ COURSETOPIC #####################
-'''
-    course topic which has a list of [CourseContent]
-    e.g for Biology Course > Intro to Bio, Reproduction, Photosynthesis
-'''
-class CourseTopicRead(CourseTopicBase):
-    id: int
-
-
-class CourseTopicCreate(CourseTopicBase):
-    pass
-
-class CourseTopicUpdate(SQLModel):
-    topic: Optional[str] = None
-
-class CourseTopicWithContent(CourseTopicRead):
-    content: List[CourseContentRead] = []
+    # map editor (Teacher | Admin) to this section which has been edited
+    user_id = Column(Integer, ForeignKey('users.id'))
+    editor = relationship("User", backref = backref("sections", uselist=False))
