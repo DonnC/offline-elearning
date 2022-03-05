@@ -10,13 +10,13 @@ class Content {
   final DateTime createdOn;
   final String title;
   final String? description;
-  final List<CourseContent>? courseContent;
+  final List<CourseTopic>? topics;
 
   Content({
     this.id,
     required this.createdOn,
     required this.title,
     this.description,
-    this.courseContent,
+    this.topics = const [],
   });
 }

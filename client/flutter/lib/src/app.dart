@@ -1,4 +1,5 @@
 import 'package:client/src/constants/index.dart';
+import 'package:client/src/shared/screens/course_content_view.dart';
 import 'package:client/src/shared/screens/shared_form_courses_view.dart';
 import 'package:client/src/shared/screens/shared_grade_selector_view.dart';
 import 'package:client/src/shared/screens/shared_home_view.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       initialRoute: sharedHomeScreen,
       onGenerateRoute: (settings) {
         var args = settings.arguments as Map<String, dynamic>?;
-        
+
         switch (settings.name) {
           case sharedGradeSelector:
             return MaterialPageRoute(
@@ -27,6 +28,10 @@ class MyApp extends StatelessWidget {
           case sharedPerFormScreen:
             return MaterialPageRoute(
                 builder: (_) => SharedFormCoursesView(args: args));
+
+          case courseContentScreen:
+            return MaterialPageRoute(
+                builder: (_) => CourseContentView(args: args));
 
           default:
             return MaterialPageRoute(builder: (_) => const SharedHomeView());

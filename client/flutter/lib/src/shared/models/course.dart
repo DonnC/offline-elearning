@@ -5,20 +5,20 @@ import 'index.dart';
 /// e.g Maths | Biology
 class Course {
   final int? id;
-  final DateTime createdOn;
+  final DateTime? createdOn;
   final String? image;
   final String name;
-  final String title;
+  final String? title;
   final String description;
   final List<Content> content;
 
   Course({
     this.id,
-    required this.createdOn,
+    this.createdOn,
     this.image,
     required this.name,
-    required this.title,
+    this.title,
     required this.description,
-    required this.content,
+    this.content = const [],
   });
 }

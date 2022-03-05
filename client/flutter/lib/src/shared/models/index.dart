@@ -4,3 +4,4 @@ export 'course_content.dart';
 export 'teacher.dart';
 export 'grade.dart';
 export 'media/index.dart';
+export 'course_topic.dart';
