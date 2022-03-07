@@ -10,10 +10,13 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-    created_on = Column(DateTime, server_default=datetime.utcnow)
+    # can be name, username or phonenumber
+    name = Column(String, index=True, unique=True)
+    #created_on = Column(DateTime, server_default=datetime.utcnow)
     hashed_password = Column(String)
     is_admin = Column(Boolean, default=False)
+    # for anonymous signin
+    is_student = Column(Boolean, default=False) 
     is_teacher = Column(Boolean, default=True)
 
 # main course e.g
@@ -29,8 +32,8 @@ class Course(Base):
     # class | form e.g form4, form6, grade3
     form = Column(String, unique=True, index=True)
     name = Column(String, unique=True, index=True)
-    created_on = Column(DateTime, server_default=datetime.utcnow)
-    updated_on = Column(DateTime, server_default=datetime.utcnow, onupdate=datetime.utcnow)
+    # created_on = Column(DateTime, server_default=datetime.utcnow)
+    # updated_on = Column(DateTime, server_default=datetime.utcnow, onupdate=datetime.utcnow)
     # full course description
     description = Column(String, default=None)
     # short course description
@@ -47,11 +50,11 @@ class Content(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     # content topic | title
-    topic = Column(String, index=True)
+    topic = Column(String, index=True, unique=True)
     # short description about this content
     description = Column(String)
-    created_on = Column(DateTime, server_default=datetime.utcnow)
-    updated_on = Column(DateTime, server_default=datetime.utcnow, onupdate=datetime.utcnow)
+    # created_on = Column(DateTime, server_default=datetime.utcnow)
+    # updated_on = Column(DateTime, server_default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # relationship with Course
     course_id = Column(Integer, ForeignKey("courses.id"))
@@ -67,11 +70,11 @@ class Section(Base):
     __tablename__ = "sections"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
+    title = Column(String, index=True, unique=True)
     data = Column(String)
 
-    created_on = Column(DateTime, server_default=datetime.utcnow)
-    updated_on = Column(DateTime, server_default=datetime.utcnow, onupdate=datetime.utcnow)
+    # created_on = Column(DateTime, server_default=datetime.utcnow)
+    # updated_on = Column(DateTime, server_default=datetime.utcnow, onupdate=datetime.utcnow)
 
     content_id = Column(Integer, ForeignKey("contents.id"))
     content = relationship("Content", back_populates="sections")

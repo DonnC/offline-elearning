@@ -1,24 +1,24 @@
 from datetime import datetime
 
-from fastapi import  FastAPI
+from fastapi import Depends, FastAPI, HTTPException
+from sqlalchemy.orm import Session
 
-from app.config import create_db_and_tables
+from app.models import models
+from app.database import engine
 
-from app.routers import course_topic, heroes, teams, course_topic_content
+from app.routers import content, courses, section, users
+
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-@app.on_event("startup")
-def on_startup():
-    create_db_and_tables()
+app.include_router(users.router)
 
-app.include_router(heroes.router)
+app.include_router(courses.router)
 
-app.include_router(teams.router)
+app.include_router(content.router)
 
-app.include_router(course_topic.router)
-
-app.include_router(course_topic_content.router)
+app.include_router(section.router)
 
 @app.get("/")
 async def root():

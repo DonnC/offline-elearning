@@ -1,13 +1,17 @@
 from fastapi import Header, HTTPException
 from sqlmodel import  Session
 
-from app.config import get_engine
+from app.database import SessionLocal
 
-engine = get_engine()
+# Dependency
+def get_db():
+    db = SessionLocal()
+    
+    try:
+        yield db
 
-def get_session():
-    with Session(engine) as session:
-        yield session
+    finally:
+        db.close()
 
 async def get_token_header(x_token: str = Header(...)):
     if x_token != "fake-super-secret-token":
