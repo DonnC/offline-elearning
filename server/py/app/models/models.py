@@ -1,5 +1,5 @@
-from datetime import datetime
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime
+
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, sql
 from sqlalchemy.orm import relationship, backref
 
 from app.database import Base
@@ -12,7 +12,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     # can be name, username or phonenumber
     name = Column(String, index=True, unique=True)
-    #created_on = Column(DateTime, server_default=datetime.utcnow)
+    created_on = Column(DateTime(timezone=True), server_default=sql.func.now())
     hashed_password = Column(String)
     is_admin = Column(Boolean, default=False)
     # for anonymous signin
@@ -30,10 +30,10 @@ class Course(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     # class | form e.g form4, form6, grade3
-    form = Column(String, unique=True, index=True)
+    form = Column(String, index=True)
     name = Column(String, unique=True, index=True)
-    # created_on = Column(DateTime, server_default=datetime.utcnow)
-    # updated_on = Column(DateTime, server_default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_on = Column(DateTime(timezone=True), server_default=sql.func.now())
+    updated_on = Column(DateTime(timezone=True), server_default=sql.func.now(), onupdate=sql.func.now())
     # full course description
     description = Column(String, default=None)
     # short course description
@@ -53,8 +53,8 @@ class Content(Base):
     topic = Column(String, index=True, unique=True)
     # short description about this content
     description = Column(String)
-    # created_on = Column(DateTime, server_default=datetime.utcnow)
-    # updated_on = Column(DateTime, server_default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_on = Column(DateTime(timezone=True), server_default=sql.func.now())
+    updated_on = Column(DateTime(timezone=True), server_default=sql.func.now(), onupdate=sql.func.now())
 
     # relationship with Course
     course_id = Column(Integer, ForeignKey("courses.id"))
@@ -73,8 +73,8 @@ class Section(Base):
     title = Column(String, index=True, unique=True)
     data = Column(String)
 
-    # created_on = Column(DateTime, server_default=datetime.utcnow)
-    # updated_on = Column(DateTime, server_default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_on = Column(DateTime(timezone=True), server_default=sql.func.now())
+    updated_on = Column(DateTime(timezone=True), server_default=sql.func.now(), onupdate=sql.func.now())
 
     content_id = Column(Integer, ForeignKey("contents.id"))
     content = relationship("Content", back_populates="sections")

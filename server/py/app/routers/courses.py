@@ -43,15 +43,37 @@ async def read_course(course_id: int, db: Session = Depends(get_db)):
     return db_course
 
 
-@router.patch("/{course_id}", response_model=schema.Course)
-async def update_course(course_id: int, course: schema.Course, db: Session = Depends(get_db)):
+@router.patch("/", response_model=schema.Course)
+async def update_course(course: schema.Course, db: Session = Depends(get_db)):
+    db_course = crud.get_course_query(db, course_id=course.id)
+
+    if not db_course.first():
+        raise HTTPException(status_code=404, detail="course not found")
+
+    db_course.update(
+        {
+            "form": course.form,
+            "name": course.name,
+            "description": course.description,
+            "synopsis": course.synopsis,
+        }
+    )
+
+    db.commit()
+
+    return crud.get_course(db, course_id=course.id)
+
+@router.delete("/{course_id}")
+async def delete_course(course_id: int, db: Session = Depends(get_db)):
     db_course = crud.get_course(db, course_id=course_id)
 
     if db_course is None:
         raise HTTPException(status_code=404, detail="course not found")
 
-    updated_course_model = models.Course(**course.dict())
-    
-    updated_course = updated_course_model.copy(update=course.dict(exclude_unset=True))
+    db_c = crud.get_course_by_id(db, course_id=course_id)
 
-    return crud.update_course(db, updated_course)
+    db.delete(db_c)
+
+    db.commit()
+
+    return None

@@ -6,12 +6,21 @@ from app.schemas import schema
 def get_contents(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Content).offset(skip).limit(limit).all()
 
-
 def get_content_by_topic(db: Session, topic: str):
     return db.query(models.Content).filter(models.Content.topic == topic).first()
 
 def get_content(db: Session, content_id: int):
     return db.query(models.Content).filter(models.Content.id == content_id).first()
+
+def get_content_by_id(db: Session, content_id: int):
+    return db.query(models.Content).get(content_id)
+
+def get_content_query(db: Session, content_id: int):
+    return db.query(models.Content).filter(models.Content.id == content_id)
+
+def get_content_query_by_id(db: Session, content_id: int):
+    return db.query(models.Content).get(content_id)
+
 
 def create_course_content(db: Session, content: schema.ContentCreate, course_id: int):
     db_content = models.Content(**content.dict(), course_id=course_id)

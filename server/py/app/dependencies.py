@@ -20,3 +20,10 @@ async def get_token_header(x_token: str = Header(...)):
 async def get_query_token(token: str):
     if token != "donnc":
         raise HTTPException(status_code=400, detail="No DonnC token provided")
+
+def hash_password(password: str):
+    '''
+        TODO use proper password hashing
+        hash user password
+    '''
+    return password + "notreallyhashed"

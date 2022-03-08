@@ -5,7 +5,7 @@ from app.dependencies import get_db
 from app.models import models
 
 from app.schemas import schema
-from app.crud import content_crud as crud
+from app.crud import content_crud as crud, course_crud as ccrud
 
 #from ..dependencies import get_token_header
 
@@ -18,6 +18,12 @@ router = APIRouter(
 
 @router.post("/{course_id}", response_model=schema.Content)
 async def create_content(course_id: int, content: schema.ContentCreate, db: Session = Depends(get_db)):
+    # first check if content is available
+    course_ = ccrud.get_course(db, course_id=course_id)
+
+    if not course_:
+        raise HTTPException(status_code=400, detail="no course found matching given id")
+
     db_content = crud.get_content_by_topic(db, topic=content.topic)
 
     if db_content:
@@ -42,16 +48,40 @@ async def read_content(content_id: int, db: Session = Depends(get_db)):
     
     return db_content
 
+@router.patch("/", response_model=schema.Content)
+async def update_content( content: schema.Content, db: Session = Depends(get_db)):
+    course_ = ccrud.get_course(db, course_id=content.course_id)
 
-@router.patch("/{content_id}", response_model=schema.Content)
-async def update_content(content_id: int, content: schema.Content, db: Session = Depends(get_db)):
-    db_content = crud.get_content(db, content_id=content_id)
+    if not course_:
+        raise HTTPException(status_code=400, detail="no course found matching given id")
 
-    if db_content is None:
+    db_content = crud.get_content_query(db, content_id=content.id)
+
+    if not db_content.first():
         raise HTTPException(status_code=404, detail="Content not found")
 
-    updated_content_model = models.Content(**content.dict())
-    
-    updated_content = updated_content_model.copy(update=content.dict(exclude_unset=True))
+    db_content.update(
+        {
+            "topic": content.topic,
+            "description": content.description,
+        }
+    )
 
-    return crud.update_content(db, updated_content)
+    db.commit()
+
+    return crud.get_content(db, content_id=content.id)
+
+@router.delete("/{content_id}")
+async def delete_content(content_id: int, db: Session = Depends(get_db)):
+    db_content_ = crud.get_content(db, content_id=content_id)
+
+    if db_content_ is None:
+        raise HTTPException(status_code=404, detail="content not found")
+
+    db_content = crud.get_content_query_by_id(db, content_id=content_id)
+
+    db.delete(db_content)
+
+    db.commit()
+
+    return None
