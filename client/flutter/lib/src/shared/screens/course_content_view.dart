@@ -67,9 +67,7 @@ class _CourseContentViewState extends State<CourseContentView> {
                                   height: 50,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
-                                    color: selectedSubTopic == topic
-                                        ? Colors.blueAccent
-                                        : Colors.transparent,
+                                    color: Colors.transparent,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: const Text('Who this is for?'),

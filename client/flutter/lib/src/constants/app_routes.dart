@@ -1,4 +1,5 @@
 // app routes
+const String quillHomeScreen = 'quill-editor';
 
 // shared routes
 const String sharedHomeScreen = 'shared-home';
