@@ -1,9 +1,10 @@
 from sqlalchemy.orm import Session
+from app.constants.constants import FETCH_LIMIT
 
 from app.models import models
 from app.schemas import schema
 
-def get_contents(db: Session, skip: int = 0, limit: int = 100):
+def get_contents(db: Session, skip: int = 0, limit: int = FETCH_LIMIT):
     return db.query(models.Content).offset(skip).limit(limit).all()
 
 def get_content_by_topic(db: Session, topic: str):

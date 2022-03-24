@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import  Session, select
+from app.constants.constants import FETCH_LIMIT
 
 from app.dependencies import get_db, hash_password
 from app.models import models
@@ -41,7 +42,7 @@ async def login_user(user: schema.UserLogin, db: Session = Depends(get_db)):
     return db_user
 
 @router.get("/", response_model=list[schema.User])
-async def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+async def read_users(skip: int = 0, limit: int = FETCH_LIMIT, db: Session = Depends(get_db)):
     users = crud.get_users(db, skip=skip, limit=limit)
     return users
 

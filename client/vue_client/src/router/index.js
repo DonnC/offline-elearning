@@ -1,29 +1,51 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import HomeView from '../views/HomeView.vue';
+import PingVue from '../components/PingVue.vue';
+import BooksVue from '../components/BooksVue.vue';
+import EditorVue from '../components/EditorVue.vue';
+import CoursesVue from '../components/CoursesVue.vue';
+import HomePageVue from '../components/HomePageVue.vue';
+import VideoPlayerVue from '../components/VideoPlayerVue.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView,
+    path: '/ping',
+    name: 'PingVue',
+    component: PingVue
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
+    path: '/',
+    name: 'HomePageVue',
+    component: HomePageVue
   },
+  {
+    path: '/books',
+    name: 'BooksVue',
+    component: BooksVue
+  },
+  {
+    path: '/editor',
+    name: 'EditorVue',
+    component: EditorVue
+  },
+  {
+    path: '/player',
+    name: 'VideoPlayerVue',
+    component: VideoPlayerVue
+  },
+  {
+    path: '/courses',
+    name: 'CoursesVue',
+    component: CoursesVue
+  }
 ];
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes,
+  routes
 });
 
 export default router;

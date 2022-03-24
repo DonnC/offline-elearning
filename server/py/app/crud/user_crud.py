@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from app.constants.constants import FETCH_LIMIT
 from app.dependencies import hash_password
 
 from app.models import models
@@ -20,7 +21,7 @@ def get_admin_user(db: Session):
 def get_user_by_name(db: Session, name: str):
     return db.query(models.User).filter(models.User.name == name).first()
 
-def get_users(db: Session, skip: int = 0, limit: int = 100):
+def get_users(db: Session, skip: int = 0, limit: int = FETCH_LIMIT):
     return db.query(models.User).offset(skip).limit(limit).all()
 
 def update_user(db: Session, db_user: models.User):

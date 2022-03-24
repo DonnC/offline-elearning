@@ -40,7 +40,7 @@ class Course(Base):
     synopsis = Column(String, default=None) 
 
     content = relationship("Content", back_populates="course")
-
+    resources = relationship("Resource", back_populates="course")
 
 # course content e.g 
 # topic: Introduction
@@ -79,6 +79,27 @@ class Section(Base):
     content_id = Column(Integer, ForeignKey("contents.id"))
     content = relationship("Content", back_populates="sections")
 
+    # section resources
+    resources = relationship("Resource", back_populates="section")
+
     # map editor (Teacher | Admin) to this section which has been edited
     user_id = Column(Integer, ForeignKey('users.id'))
     editor = relationship("User", backref = backref("sections", uselist=False))
+
+# course resources can be video, test, exam, book, assignment, other
+class Resource(Base):
+    __tablename__ = "resources"
+
+    id = Column(Integer, primary_key=True, index=True)
+    type = Column(String, index=True, unique=True)
+    created_on = Column(DateTime(timezone=True), server_default=sql.func.now())
+    filename = Column(String)
+    filepath = Column(String)
+    belong_to = Column(String) # course | section
+    url = Column(String)
+
+    section_id = Column(Integer, ForeignKey("sections.id"))
+    section = relationship("Section", back_populates="resources")
+
+    course_id = Column(Integer, ForeignKey("courses.id"))
+    course = relationship("Course", back_populates="resources")

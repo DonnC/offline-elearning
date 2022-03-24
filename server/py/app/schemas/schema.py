@@ -29,6 +29,28 @@ class User(UserBase):
     class Config:
         orm_mode = True
 
+############################## RESOURCE ##############
+class ResourceBase(BaseModel):
+    type: str
+    filename: str
+    filepath: str
+    url: str = ''
+    belong_to: str = ''
+
+class ResourceCreate(ResourceBase):
+    pass
+
+class Resource(ResourceBase):
+    id: int
+    created_on: datetime
+    
+    def url(self):
+        # TODO generate dynamic url from server base url
+        return self.filepath + self.filename
+
+    class Config:
+        orm_mode = True
+
 ################### SECTION ####################
 class SectionBase(BaseModel):
     title: str
@@ -44,6 +66,7 @@ class Section(SectionBase):
     content_id: int
     created_on: datetime
     updated_on: datetime
+    resources: list[Resource] = []
     user_id: int | None = None
     
     class Config:
@@ -84,8 +107,11 @@ class CourseCreate(CourseBase):
 class Course(CourseBase):
     id: int
     content: list[Content] = []
+    resources: list[Resource] = []
     created_on: datetime
     updated_on: datetime
 
     class Config:
         orm_mode = True
+
+
