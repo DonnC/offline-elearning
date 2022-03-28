@@ -6,6 +6,7 @@ import EditorVue from '../components/EditorVue.vue';
 import CoursesVue from '../components/CoursesVue.vue';
 import HomePageVue from '../components/HomePageVue.vue';
 import VideoPlayerVue from '../components/VideoPlayerVue.vue';
+import FormsVue from '../components/FormsVue.vue';
 
 Vue.use(VueRouter);
 
@@ -39,6 +40,11 @@ const routes = [
     path: '/courses',
     name: 'CoursesVue',
     component: CoursesVue
+  },
+  {
+    path: '/forms',
+    name: 'FormsVue',
+    component: FormsVue
   }
 ];
 

@@ -1,44 +1,44 @@
 <template>
-  <v-container class="grey lighten-5">
-    <v-row
-      style="height: 150px;"
-      :class="mb-6"
-    >
-      <v-col
-        v-for="(course, index) in courses"
-        :key="index"
-        cols="4"
+  <div
+    v-if="!loading"
+    class="main"
+  > 
+    <v-container class="grey lighten-5">
+      <v-row
+        style="height: 150px;"
       >
-        <div class="p-4">
-          <v-card
-            height="400px"
-            elevation="10"
-            rounded
-            outlined
-            tile
-          >
-            <v-img
-              src="http://127.0.0.1:8000/static/form4/biology/introduction/customeff.png"
-              height="250px"
-              cover
-            />
-            <v-card-subtitle>
-              7 lessons
-            </v-card-subtitle>
-            <v-card-title>
-              Biology
-            </v-card-title>
-            <v-spacer />
-          </v-card>
-        </div>
-      </v-col>
-      <v-responsive
-        v-if="index === 2"
-        :key="`width-${index}`"
-        width="100%"
-      />
-    </v-row>
-  </v-container>
+        <v-col
+          v-for="course in courses"
+          :key="course.id"
+          cols="4"
+        >
+          <div class="p-4">
+            <v-card
+              height="400px"
+              elevation="10"
+              rounded
+              outlined
+              tile
+            >
+              <v-card-subtitle>
+                {{ course.content.length }} lessons
+              </v-card-subtitle>
+              <v-card-title>
+                {{ course.name }}
+              </v-card-title>
+            </v-card>
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
+
+  <div
+    v-else
+    class="overlay"
+  >
+    Loading...
+  </div>
 </template>
 
 
@@ -47,21 +47,30 @@
 export default {
   data() {
     return {
-      courses: [
-        'bio',
-        'bio',
-        'bio',
-        'bio',
-        'bio',
-        'bio',
-        'bio',
-        'bio',
-        'bio',
-        'bio',
-        'bio'
-      ]
+      loading: false
     };
+  },
+  computed: {
+    courses() {
+      return this.$store.getters.getCourses;
+    }
+  },
+  mounted() {
+    this.loading = true;
+    this.$store.dispatch('fetchFormCourses');
+    this.loading = false;
   }
 
 };
 </script>
+
+
+<style scoped>
+    .overlay {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      color: #dc6868;
+    }
+</style>

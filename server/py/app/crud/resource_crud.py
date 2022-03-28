@@ -20,6 +20,23 @@ def get_resource_query(db: Session, resource_id: int):
 def get_resource_by_type(db: Session, type: ResourceTypeEnum):
     return db.query(models.Resource).filter(models.Resource.type == type.value).all()
 
+def get_section_resources(db: Session, section_id: int, type: ResourceTypeEnum = None):
+    _filter_sec = models.Resource.section_id == section_id
+
+    if type:
+        return db.query(models.Resource).filter(models.Resource.section_id == section_id).filter(models.Resource.type == type.value).all()
+
+    return db.query(models.Resource).filter(_filter_sec).all()
+
+def get_course_resources(db: Session, course_id: int, type: ResourceTypeEnum = None):
+    _filter_course = models.Resource.course_id == course_id
+
+    if type:
+        return db.query(models.Resource).filter(models.Resource.course_id == course_id).filter(models.Resource.type == type.value).all()
+
+    return db.query(models.Resource).filter(_filter_course).all()
+
+
 def get_resource_by_parent(db: Session, parent: ResourceParent):
     '''
     course | section

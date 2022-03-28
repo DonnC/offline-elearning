@@ -4,7 +4,10 @@ from app.constants.constants import FETCH_LIMIT
 from app.models import models
 from app.schemas import schema
 
-def get_contents(db: Session, skip: int = 0, limit: int = FETCH_LIMIT):
+def get_contents(db: Session, skip: int = 0, limit: int = FETCH_LIMIT, course_id: int=None):
+    if course_id:
+        return db.query(models.Content).filter(models.Content.course_id == course_id).offset(skip).limit(limit).all()
+
     return db.query(models.Content).offset(skip).limit(limit).all()
 
 def get_content_by_topic(db: Session, topic: str):

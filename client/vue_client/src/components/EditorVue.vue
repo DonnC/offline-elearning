@@ -59,7 +59,7 @@
 <script>
 import { VueEditor } from 'vue2-editor';
 import axios from 'axios';
-import baseUrl from '../constants/constants.js';
+import { baseUrl } from '../constants/constants.js';
 
 export default {
   components: {

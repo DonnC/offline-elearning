@@ -94,7 +94,7 @@ class Content(ContentBase):
 
 ################################## COURSE ################
 class CourseBase(BaseModel):
-    form: str
+    form: str | None = None
     name: str
     description: str | None = None
     synopsis: str | None = None

@@ -143,7 +143,7 @@
 
 <script>
 import axios from 'axios';
-import baseUrl from '../constants/constants.js';
+import { baseUrl } from '../constants/constants.js';
 
 export default {
   data() {

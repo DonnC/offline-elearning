@@ -6,6 +6,8 @@ import vuetify from './plugins/vuetify';
 import 'bootstrap/dist/css/bootstrap.css';
 import VueCoreVideoPlayer from 'vue-core-video-player';
 
+import { store } from './store.js';
+
 Vue.use(VueCoreVideoPlayer);
 
 Vue.use(BootstrapVue);
@@ -15,5 +17,6 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   vuetify,
+  store,
   render: (h) => h(App)
 }).$mount('#app');

@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlmodel import  Session, select
 from app.constants.constants import FETCH_LIMIT
@@ -34,9 +35,9 @@ async def create_content(course_id: int, content: schema.ContentCreate, db: Sess
 
 
 @router.get("/", response_model=list[schema.Content])
-async def read_contents(skip: int = 0, limit: int = FETCH_LIMIT, db: Session = Depends(get_db)):
-    Contents = crud.get_contents(db, skip=skip, limit=limit)
-    return Contents
+async def read_contents(course_id: Optional[int] = None, skip: int = 0, limit: int = FETCH_LIMIT, db: Session = Depends(get_db)):
+    contents = crud.get_contents(db, skip=skip, limit=limit, course_id=course_id)
+    return contents
 
 
 @router.get("/{content_id}", response_model=schema.Content)

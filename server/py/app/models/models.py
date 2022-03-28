@@ -31,7 +31,8 @@ class Course(Base):
     id = Column(Integer, primary_key=True, index=True)
     # class | form e.g form4, form6, grade3
     form = Column(String, index=True)
-    name = Column(String, unique=True, index=True)
+    # there can be shona course for form 3 and form 6
+    name = Column(String, index=True)
     created_on = Column(DateTime(timezone=True), server_default=sql.func.now())
     updated_on = Column(DateTime(timezone=True), server_default=sql.func.now(), onupdate=sql.func.now())
     # full course description

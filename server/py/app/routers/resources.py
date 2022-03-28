@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Request, UploadFile
 from sqlmodel import  Session
 
@@ -44,6 +45,34 @@ async def get_resource_by_type(type: ResourceTypeEnum, db: Session = Depends(get
 async def get_resource_by_parent(parent: ResourceParent, db: Session = Depends(get_db)):
     res = crud.get_resource_by_parent(db, parent)
     return res
+
+
+@router.get("/section/{section_id}", response_model=list[schema.Resource])
+async def get_section_resources(section_id: int,  type: Optional[ResourceTypeEnum] = None, db: Session = Depends(get_db)):
+    section = scrud.get_section(db, section_id=section_id)
+
+    if not section:
+        raise HTTPException(status_code=400, detail="no course content section found matching given id")
+
+    try:
+        return crud.get_section_resources(db, section_id, type)
+
+    except Exception as err:
+        raise HTTPException(status_code=400, detail=f"failed to get section resources: {err}")
+
+
+@router.get("/course/{course_id}", response_model=list[schema.Resource])
+async def get_course_resources(course_id: int,  type: Optional[ResourceTypeEnum] = None, db: Session = Depends(get_db)):
+    course = c_crud.get_course(db, course_id=course_id)
+
+    if not course:
+        raise HTTPException(status_code=400, detail="no course found matching given id")
+
+    try:
+        return crud.get_course_resources(db, course_id, type)
+
+    except Exception as err:
+        raise HTTPException(status_code=400, detail=f"failed to get course resources: {err}")
 
 @router.post("/section/", response_model=schema.Resource)
 async def create_section_resource(section_id: int, type: ResourceTypeEnum, file: UploadFile,  request: Request, db: Session = Depends(get_db)):

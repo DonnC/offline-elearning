@@ -2,7 +2,6 @@
   <v-container fluid>
     <v-row
       style="height: 100px;"
-      :class="mb-2"
     >
       <v-col
         cols="4"
@@ -14,6 +13,8 @@
             max-width="340px"
             elevation="4"
             color="blue"
+            to="/forms"
+            @click="updateRole('student')"
           >
             <center>
               <v-col
@@ -44,6 +45,7 @@
             max-width="340px"
             elevation="4"
             color="blue"
+            @click="updateRole('teacher')"
           >
             <center>
               <v-col
@@ -74,6 +76,7 @@
             max-width="340px"
             elevation="4"
             color="blue"
+            @click="updateRole('admin')"
           >
             <center>
               <v-col
@@ -108,9 +111,11 @@ export default {
     AccountTie,
     ShieldAccount
   },
-  data: () => ({
-    
-  })
+  methods: {
+    updateRole(user) {
+      this.$store.commit('UPDATE_USER_ROLE', user);
+    }
+  }
 };
 </script>
 

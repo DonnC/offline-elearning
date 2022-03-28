@@ -3,6 +3,7 @@ from datetime import datetime
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from app.constants.constants import *
 
 from app.models import models
 from app.database import engine
@@ -13,7 +14,13 @@ models.Base.metadata.create_all(bind=engine)
 
 origins = ["*"]
 
-app = FastAPI()
+app = FastAPI(
+    title=APP_TITLE,
+    description=APP_DESC,
+    version=APP_VERSION,
+    contact=APP_CONTACT,
+    license_info=APP_LICENSE
+)
 
 app.add_middleware(
     CORSMiddleware,
