@@ -45,6 +45,7 @@
             max-width="340px"
             elevation="4"
             color="blue"
+            to="/login"
             @click="updateRole('teacher')"
           >
             <center>
@@ -76,6 +77,7 @@
             max-width="340px"
             elevation="4"
             color="blue"
+            to="/login"
             @click="updateRole('admin')"
           >
             <center>

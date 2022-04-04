@@ -17,6 +17,7 @@
     "vue-core-video-player": "^0.2.0",
     "vue-material-design-icons": "^5.0.0",
     "vue-pdf": "^4.3.0",
+    "vue-resize-text": "^0.1.1",
     "vue-router": "^3.5.1",
     "vue-sidebar-menu": "^4.8.1",
     "vue2-editor": "^2.10.3",

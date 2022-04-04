@@ -1,15 +1,14 @@
 <template>
-  <div class="player-container p-4">
+  <div class="container">
     <div
       v-if="url"
     >
-      <v-card
-        height="500px"
-      >
-        <vue-core-video-player
-          :src="url"
-        />
-      </v-card>
+      <iframe
+        :src="url"
+        width="100%"
+        height="100"
+        frameborder="0"
+      />
     </div>
 
     <div
@@ -24,10 +23,12 @@
 
 <script>
 export default {
+  name: 'PdfResourceVue',
   computed: {
     url() {
       return this.$store.getters.getResourceUrl;
     }
   }
 };
+
 </script>

@@ -19,7 +19,10 @@
 
     <div class="p-3">
       <v-card v-if="preview">
-        <div class="p-3" v-html="content" />
+        <div
+          class="p-3"
+          v-html="content"
+        />
       </v-card>
 
       <v-card v-else>

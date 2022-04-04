@@ -1,12 +1,15 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import PingVue from '../components/PingVue.vue';
+import LoginVue from '../components/LoginVue.vue';
 import BooksVue from '../components/BooksVue.vue';
 import EditorVue from '../components/EditorVue.vue';
 import CoursesVue from '../components/CoursesVue.vue';
 import HomePageVue from '../components/HomePageVue.vue';
 import VideoPlayerVue from '../components/VideoPlayerVue.vue';
 import FormsVue from '../components/FormsVue.vue';
+import ResourceVue from '../components/ResourceVue.vue';
+import PdfResourceVue from '../components/PdfResourceVue.vue';
 
 Vue.use(VueRouter);
 
@@ -22,6 +25,16 @@ const routes = [
     component: HomePageVue
   },
   {
+    path: '/resource',
+    name: 'ResourceVue',
+    component: ResourceVue
+  },
+  {
+    path: '/login',
+    name: 'LoginVue',
+    component: LoginVue
+  },
+  {
     path: '/books',
     name: 'BooksVue',
     component: BooksVue
@@ -35,6 +48,11 @@ const routes = [
     path: '/player',
     name: 'VideoPlayerVue',
     component: VideoPlayerVue
+  },
+  {
+    path: '/pdf',
+    name: 'PdfResourceVue',
+    component: PdfResourceVue
   },
   {
     path: '/courses',

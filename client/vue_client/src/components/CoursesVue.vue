@@ -19,6 +19,7 @@
               rounded
               outlined
               tile
+              @click="onCourseTap(course)"
             >
               <v-card-subtitle>
                 {{ course.content.length }} lessons
@@ -35,9 +36,13 @@
 
   <div
     v-else
-    class="overlay"
   >
-    Loading...
+    <v-progress-circular
+      :size="70"
+      :width="7"
+      color="blue"
+      indeterminate
+    />
   </div>
 </template>
 
@@ -45,32 +50,25 @@
 <script>
 
 export default {
-  data() {
-    return {
-      loading: false
-    };
-  },
   computed: {
     courses() {
       return this.$store.getters.getCourses;
+    },
+    loading() {
+      return this.$store.getters.getLoaderStatus;
     }
   },
   mounted() {
-    this.loading = true;
     this.$store.dispatch('fetchFormCourses');
-    this.loading = false;
+  },
+  methods: {
+    onCourseTap(course) {
+      this.$store.commit('SET_COURSE', course);
+
+      // TODO go to course view page
+    }
   }
 
 };
 </script>
 
-
-<style scoped>
-    .overlay {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-      color: #dc6868;
-    }
-</style>

@@ -5,8 +5,12 @@ import router from './router';
 import vuetify from './plugins/vuetify';
 import 'bootstrap/dist/css/bootstrap.css';
 import VueCoreVideoPlayer from 'vue-core-video-player';
+import VueResizeText from 'vue-resize-text';
+
 
 import { store } from './store.js';
+
+Vue.use(VueResizeText);
 
 Vue.use(VueCoreVideoPlayer);
 

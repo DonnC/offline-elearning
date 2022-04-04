@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <center>
-      Offline eLearning Resource Management System (OeRMS)
-    </center>
+    <v-app-bar app>
+      <v-app-bar-title>Offline eLearning Resource Management System (OeRMS)</v-app-bar-title>
+    </v-app-bar>
    
     <v-main>
       <v-container fluid />
