@@ -25,6 +25,8 @@ async def create_course(course: schema.CourseCreate,  form: GradeEnum, db: Sessi
     # if db_course:
     #     raise HTTPException(status_code=400, detail="Course already registered")
 
+    # TODO randomly add course color here
+
     course.form = form.value
     
     return crud.create_course(db=db, course=course)
@@ -33,7 +35,6 @@ async def create_course(course: schema.CourseCreate,  form: GradeEnum, db: Sessi
 async def read_courses(form: Optional[GradeEnum] = None, skip: int = 0, limit: int = FETCH_LIMIT, db: Session = Depends(get_db)):
     courses = crud.get_courses(db, skip=skip, limit=limit, form=form)
     return courses
-
 
 @router.get("/{course_id}", response_model=schema.Course)
 async def read_course(course_id: int, db: Session = Depends(get_db)):
@@ -44,7 +45,6 @@ async def read_course(course_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="course not found")
     
     return db_course
-
 
 @router.patch("/", response_model=schema.Course)
 async def update_course(course: schema.Course, db: Session = Depends(get_db)):

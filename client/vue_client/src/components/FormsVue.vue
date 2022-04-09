@@ -17,11 +17,12 @@
             tile
             @click="updateForm(form.grade)"
           >
-            <center>
-              <v-card-title>
-                {{ form.name }}
-              </v-card-title>
-            </center>
+            <div
+              class="text-center"
+              align="center"
+            >
+              {{ form.name }}
+            </div>
           </v-card>
         </div>
       </v-col>

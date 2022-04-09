@@ -73,6 +73,7 @@ export const store = new Vuex.Store({
   },
   getters: {
     getCourses: (state) => state.courses,
+    getCourseContents: (state) => state.contents,
     getLoaderStatus: (state) => state.loading,
     getResourceTabs: (state) => state.resource_tabs,
     getResourceUrl: (state) => state.resource_url,
@@ -108,11 +109,21 @@ export const store = new Vuex.Store({
     SET_COURSES(state, courses) {
       state.courses = courses;
     },
+    SET_CONTENTS(state, contents) {
+      state.contents = contents;
+    },
     SET_COURSE(state, course) {
       state.course = course;
     },
     SET_SECTION(state, section) {
       state.section = section;
+    },
+    SET_SECTION_DATA(state, data) {
+      var current =  state.section;
+
+      current['data'] = data;
+
+      state.section = current;
     },
     SET_RESOURCES(state, resources) {
       state.resources = resources;
@@ -137,6 +148,52 @@ export const store = new Vuex.Store({
       
       commit('UPDATE_LOADING_STATUS', false);
     },
+    async fetchCourseContents({ commit, state }) {
+      const path = baseUrl + 'contents/?course_id' + state.course.id + '&skip=' + skip + '&limit=' + fetchLimit;
+
+      commit('UPDATE_LOADING_STATUS', true);
+
+      axios.get(path)
+        .then((res) => {
+          commit('SET_CONTENTS', res.data);
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          alert(error);
+          console.error(error);
+        });
+      
+      commit('UPDATE_LOADING_STATUS', false);
+    },
+    async uploadResource({ commit, state, file, type, is_section }) {
+      const section_path =  baseUrl + 'resources/section/?section_id' + state.section.id + '&type=' + type;
+      const course_path =  baseUrl + 'resources/course/?course_id' + state.course.id + '&type=' + type;
+
+      const path = is_section ? section_path : course_path;
+      
+      commit('UPDATE_LOADING_STATUS', true);
+
+      var formData = new FormData();
+
+      formData.append('file', file);
+
+      axios.post({
+        url: path, 
+        data: formData
+      })
+        .then((res) => {
+          // TODO fetch latest
+          res;
+
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          alert(error);
+          console.error(error);
+        });
+      
+      commit('UPDATE_LOADING_STATUS', false);
+    },
     async fetchCourseResources({ commit, state }) {
       var courseId = state.course.id; 
       const path = baseUrl + 'resources/course/' + courseId;
@@ -146,6 +203,27 @@ export const store = new Vuex.Store({
       axios.get(path)
         .then((res) => {
           commit('SET_RESOURCES', res.data);
+       
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          alert(error);
+          console.error(error);
+        });
+
+      commit('UPDATE_LOADING_STATUS', false);
+    },
+    async updateSection({ commit, state }) {
+      var data = state.section;
+      const path = baseUrl + 'sections/';
+
+      console.log(data);
+
+      commit('UPDATE_LOADING_STATUS', true);
+
+      axios.patch(path, data)
+        .then((res) => {
+          commit('SET_SECTION', res.data);
        
         })
         .catch((error) => {

@@ -31,6 +31,10 @@ class Course(Base):
     id = Column(Integer, primary_key=True, index=True)
     # class | form e.g form4, form6, grade3
     form = Column(String, index=True)
+
+    # bg color of course
+    color = Column(String, default=None)
+
     # there can be shona course for form 3 and form 6
     name = Column(String, index=True)
     created_on = Column(DateTime(timezone=True), server_default=sql.func.now())
@@ -92,12 +96,15 @@ class Resource(Base):
     __tablename__ = "resources"
 
     id = Column(Integer, primary_key=True, index=True)
-    type = Column(String, index=True, unique=True)
+    type = Column(String, index=True)
     created_on = Column(DateTime(timezone=True), server_default=sql.func.now())
     filename = Column(String)
     filepath = Column(String)
     belong_to = Column(String) # course | section
     url = Column(String)
+
+    # if true, resource is a course background image
+    course_background = Column(Boolean, default=False)
 
     section_id = Column(Integer, ForeignKey("sections.id"))
     section = relationship("Section", back_populates="resources")

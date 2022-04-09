@@ -25,3 +25,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
 ### uploaded files
+
+#### card color
+color="#82B1FF"
+
+npm install vue2-editor@images

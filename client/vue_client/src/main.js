@@ -8,6 +8,7 @@ import VueCoreVideoPlayer from 'vue-core-video-player';
 import VueResizeText from 'vue-resize-text';
 
 
+
 import { store } from './store.js';
 
 Vue.use(VueResizeText);

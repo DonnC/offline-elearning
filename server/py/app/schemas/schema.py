@@ -36,6 +36,7 @@ class ResourceBase(BaseModel):
     filepath: str
     url: str = ''
     belong_to: str = ''
+    course_background: bool = False
 
 class ResourceCreate(ResourceBase):
     pass
@@ -54,7 +55,7 @@ class Resource(ResourceBase):
 ################### SECTION ####################
 class SectionBase(BaseModel):
     title: str
-    data: str
+    data: str = ""
     
 
 class SectionCreate(SectionBase):
@@ -98,6 +99,7 @@ class CourseBase(BaseModel):
     name: str
     description: str | None = None
     synopsis: str | None = None
+    color: str | None = None
     
 
 class CourseCreate(CourseBase):
@@ -113,5 +115,3 @@ class Course(CourseBase):
 
     class Config:
         orm_mode = True
-
-

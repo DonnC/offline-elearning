@@ -8,6 +8,7 @@ import CoursesVue from '../components/CoursesVue.vue';
 import HomePageVue from '../components/HomePageVue.vue';
 import VideoPlayerVue from '../components/VideoPlayerVue.vue';
 import FormsVue from '../components/FormsVue.vue';
+import ContentVue from '../components/ContentVue.vue';
 import ResourceVue from '../components/ResourceVue.vue';
 import PdfResourceVue from '../components/PdfResourceVue.vue';
 
@@ -33,6 +34,11 @@ const routes = [
     path: '/login',
     name: 'LoginVue',
     component: LoginVue
+  },
+  {
+    path: '/content',
+    name: 'ContentVue',
+    component: ContentVue
   },
   {
     path: '/books',

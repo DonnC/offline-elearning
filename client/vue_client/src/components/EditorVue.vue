@@ -29,6 +29,7 @@
         <vue-editor
           id="editor"
           v-model="content"
+          :editor-options="editorSettings"
           use-custom-image-handler
           @imageAdded="handleImageAdded"
         />
@@ -61,8 +62,11 @@
 
 <script>
 import { VueEditor } from 'vue2-editor';
+//import  ImageResize  from 'quill-image-resize-vue';
 import axios from 'axios';
 import { baseUrl } from '../constants/constants.js';
+
+// Quill.register('modules/imageResize', ImageResize);
 
 export default {
   components: {
@@ -71,12 +75,17 @@ export default {
 
   data() {
     return {
-      content: 'write course content here..',
+      content: '',
       showAlert: false,
       // success, info, warning or error
       alertMsg: 'content saved',
       alertType: 'info',
       preview: false,   // show preview when selected, else show editor
+      editorSettings: {
+        modules: {
+          imageResize: {}
+        }
+      },
       items: [
         {
           text: 'Biology',
@@ -97,6 +106,28 @@ export default {
     };
   },
 
+  mounted() {
+    // fetch default section content data
+    var sec_content = this.$store.state.section;
+
+    var content = '';
+
+    if(sec_content.data == null) {
+      content = 'write course section content here..';
+    }
+
+    else if (sec_content.data.length == 0) {
+      content = 'write course section content here..';
+    }
+
+    else {
+      content =  this.$store.state.section.data;
+    }
+
+    this.content = content;
+    
+  },
+
   methods: {
     togglePreview: function() {
       let status = false;
@@ -107,33 +138,48 @@ export default {
     },
     saveContent: function() {
       // You have the content to save
-      // ! update database
+      // 
+      this.$store.commit('SET_SECTION_DATA', this.content);
+      
       console.log(this.content);
+      // setSection
+      this.$store.dispatch('updateSection');
+      // show alert
+      console.log('section updated');
+
+      // go back 
+      this.$router.back();
+
     },
     handleImageAdded: function(file, Editor, cursorLocation, resetUploader) {
-      // An example of using FormData
-      // NOTE: Your key could be different such as:
-      // formData.append('file', file)
+      // resources/section/?section_id=1&type=other
+      // images have type == other
+      console.log('handle img..');
+      const path = baseUrl + 'resources/section/?section_id=' + this.$store.state.section.id + '&type=other';
+
+      console.log('handle img url: ' + path);
 
       var formData = new FormData();
 
-      const path = baseUrl;
+      formData.append('file', file);
 
-      formData.append('image', file);
+      console.log(formData);
 
-      axios({
-        url: path,
-        method: 'POST',
-        data: formData
-      })
-        .then(result => {
-          const url = result.data.url; // Get url from response
+      console.log('uploading img to server..');
+
+      console.log(formData);
+
+      axios.post(path, formData)
+        .then((res) => {
+          console.log(res.data);
+          const url = res.data.url; // Get url from response
           Editor.insertEmbed(cursorLocation, 'image', url);
-          resetUploader();
+          resetUploader;
         })
-        .catch(err => {
-          // show error message popup
-          console.log(err);
+        .catch((error) => {
+          // eslint-disable-next-line
+          alert(error);
+          console.error(error);
         });
     }
   }
