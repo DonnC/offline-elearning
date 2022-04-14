@@ -9,6 +9,7 @@ import HomePageVue from '../components/HomePageVue.vue';
 import VideoPlayerVue from '../components/VideoPlayerVue.vue';
 import FormsVue from '../components/FormsVue.vue';
 import ContentVue from '../components/ContentVue.vue';
+import CourseDetailsVue from '../components/CourseDetailsVue.vue';
 import ResourceVue from '../components/ResourceVue.vue';
 import PdfResourceVue from '../components/PdfResourceVue.vue';
 
@@ -39,6 +40,11 @@ const routes = [
     path: '/content',
     name: 'ContentVue',
     component: ContentVue
+  },
+  {
+    path: '/course-detail',
+    name: 'CourseDetailsVue',
+    component: CourseDetailsVue
   },
   {
     path: '/books',

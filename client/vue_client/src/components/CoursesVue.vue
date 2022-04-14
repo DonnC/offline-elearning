@@ -105,7 +105,7 @@ export default {
       this.$store.commit('SET_COURSE', course);
 
       // go to course view page
-      this.$router.push('/content');
+      this.$router.push('/course-detail');
     }
   }
 
