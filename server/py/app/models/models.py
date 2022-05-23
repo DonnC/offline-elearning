@@ -32,8 +32,8 @@ class Course(Base):
     # class | form e.g form4, form6, grade3
     form = Column(String, index=True)
 
-    # bg color of course
-    color = Column(String, default=None)
+    # bg color of course e.g #F8BBD0 | #5695E8FF
+    color = Column(String, default="#5695E8")
 
     # there can be shona course for form 3 and form 6
     name = Column(String, index=True)
@@ -76,7 +76,7 @@ class Section(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True, unique=True)
-    data = Column(String)
+    data = Column(String, default="")
 
     created_on = Column(DateTime(timezone=True), server_default=sql.func.now())
     updated_on = Column(DateTime(timezone=True), server_default=sql.func.now(), onupdate=sql.func.now())

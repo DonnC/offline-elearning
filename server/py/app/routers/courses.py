@@ -20,12 +20,10 @@ router = APIRouter(
 
 @router.post("/", response_model=schema.Course)
 async def create_course(course: schema.CourseCreate,  form: GradeEnum, db: Session = Depends(get_db)):
-    # db_course = crud.get_course_by_name(db, name=course.name)
+    db_course = crud.get_course_by_name_form(db, name=course.name, form=form.value)
 
-    # if db_course:
-    #     raise HTTPException(status_code=400, detail="Course already registered")
-
-    # TODO randomly add course color here
+    if db_course:
+        raise HTTPException(status_code=400, detail="Course already registered")
 
     course.form = form.value
     

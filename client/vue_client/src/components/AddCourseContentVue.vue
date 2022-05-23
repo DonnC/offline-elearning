@@ -1,11 +1,11 @@
 <template>
   <v-card
     class="mx-auto my-12"
-    max-width="500"
+    max-width="800"
     max-height="900"
   >
     <v-card-text>
-      <div>Welcome {{ role }} - Login to proceed</div>
+      <div> Add New {{ form }} Course Content </div>
     </v-card-text>
 
     <div class="p-3">
@@ -14,20 +14,24 @@
         v-model="valid"
         lazy-validation
       >
+        <v-select
+          v-model="course"
+          label="Course"
+          :items="courses"
+        />
+
         <v-text-field
           v-model="name"
-          label="Username"
+          label="Topic Name"
           required
         />
 
         <v-text-field
-          v-model="password"
-          :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-          :rules="[rules.required]"
-          :type="show1 ? 'text' : 'password'"
-          label="Password"
-          @click:append="show1 = !show1"
+          v-model="description"
+          label="Description"
+          required
         />
+
         <div class="p-4">
           <v-btn
             :disabled="!valid"
@@ -35,7 +39,7 @@
             class="mr-4"
             @click="validate"
           >
-            Login
+            Save
           </v-btn>
 
           <v-btn
@@ -56,36 +60,27 @@
 export default {
   data: () => ({
     valid: true,
+    course: null,
     name: '',
-    show1: false,
-    loading: false,
-    password: '',
-    rules: {
-      required: value => !!value || 'Required.',
-      min: v => v.length >= 8 || 'Min 8 characters',
-      emailMatch: () => ('The email and password you entered don\'t match')
-    }
+    description: '',
+    loading: false
   }),
   computed: {
-    role() {
-      return this.$store.state.role;
+    form() {
+      return this.$store.state.form;
+    },
+    courses() {
+      return this.$store.getters.getCourses;
     }
   },
   mounted() {
-    if(this.$store.state.role === 'student') {
-      this.$router.push('/');
-    }
-
+    this.$store.dispatch('fetchFormCourses');
   },
   methods: {
     validate () {
-      if(this.role === 'student') {
-        this.$router.push('/forms');
-      }
-    
       this.$refs.form.validate();
 
-      this.login();
+      this.saveCourse();
     },
     reset () {
       this.$refs.form.reset();
@@ -93,17 +88,16 @@ export default {
     resetValidation () {
       this.$refs.form.resetValidation();
     },
-    login() {
+    saveCourse() {
+      var payload = {
+        'topic': this.name,
+        'description': this.description,
+        'course_id': this.course.id
+      };
 
-      this.$store.dispatch('loginUser', {
-        'name': this.name,
-        'password': this.password
-      });
+      console.log(payload);
 
-      if(this.role != 'student') {
-        this.$router.push('/forms');
-      }
-      
+      // this.$store.dispatch('loginUser', payload);
     }
   }
 };

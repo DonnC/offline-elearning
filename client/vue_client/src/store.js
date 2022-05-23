@@ -252,29 +252,116 @@ export const store = new Vuex.Store({
 
       commit('UPDATE_LOADING_STATUS', false);
     },
-    async loginUser({ commit, payload }) {
+    async loginUser({ commit }, pp) {
       const path = baseUrl + 'users/login';
       
       commit('UPDATE_LOADING_STATUS', true);
 
-      axios.post(path, payload)
+      console.log(pp);
+
+      axios.post(path, pp)
         .then((res) => {
           // ! token needed TODO Add proper token
           // localStorage.setItem('todo_items', JSON.stringify(this.todo_items));
           // if (localStorage.getItem('todo_items'))
           // this.todo_items = JSON.parse(localStorage.getItem('todo_items'));
+
+          console.log(res.data);
+          
+          var _role = 'student';
+
+          var isAdmin = res.data.is_admin;
+
+          if(isAdmin) {
+            _role = 'admin';
+          }
+
+          else {
+            _role = 'teacher';
+          }
+
           var pl = {
             token: '82sshuds9sd9sdhd9dsy',
             isLoggedIn: true,
-            userId: res.id
+            userId: res.data.id
           };
 
           commit('UPDATE_AUTH_USER', pl);
+
+          commit('UPDATE_USER_ROLE', _role);
         })
         .catch((error) => {
-          // eslint-disable-next-line
-          alert(error);
-          console.error(error);
+          if(error.response) {
+            // eslint-disable-next-line
+            console.error(error.response.data);
+            alert(error.response.data.detail);
+          }
+
+          else {
+            console.log(error.message);
+            console.error(error);
+            alert(error.message);
+          }
+        });
+
+      commit('UPDATE_LOADING_STATUS', false);
+
+    },
+    async addCourse({ commit, state }, pp) {
+      // .. /courses/?form=form1
+      const path = baseUrl + 'courses/?form=' + state.form;
+      
+      commit('UPDATE_LOADING_STATUS', true);
+
+      console.log(pp);
+
+      axios.post(path, pp)
+        .then((res) => {
+          console.log(res.data);
+          
+        })
+        .catch((error) => {
+          if(error.response) {
+            // eslint-disable-next-line
+            console.error(error.response.data);
+            alert(error.response.data.detail);
+          }
+
+          else {
+            console.log(error.message);
+            console.error(error);
+            alert(error.message);
+          }
+        });
+
+      commit('UPDATE_LOADING_STATUS', false);
+
+    },
+    async deleteCourse({ commit }, pp) {
+      // .. /courses/?form=form1
+      const path = baseUrl + 'courses/' + pp.id;
+      
+      commit('UPDATE_LOADING_STATUS', true);
+
+      console.log(pp);
+
+      axios.delete(path)
+        .then((res) => {
+          console.log(res.data);
+          
+        })
+        .catch((error) => {
+          if(error.response) {
+            // eslint-disable-next-line
+            console.error(error.response.data);
+            alert(error.response.data.detail);
+          }
+
+          else {
+            console.log(error.message);
+            console.error(error);
+            alert(error.message);
+          }
         });
 
       commit('UPDATE_LOADING_STATUS', false);

@@ -26,6 +26,9 @@ def get_courses(db: Session, skip: int = 0, limit: int = FETCH_LIMIT, form: Grad
 def get_course_by_name(db: Session, name: str):
     return db.query(models.Course).filter(models.Course.name == name).first()
 
+def get_course_by_name_form(db: Session, name: str, form: str):
+    return db.query(models.Course).filter(models.Course.name == name).filter(models.Course.form == form).first()
+
 def create_course(db: Session, course: schema.CourseCreate):
     db_course = models.Course(**course.dict())
     db.add(db_course)

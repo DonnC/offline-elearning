@@ -3,12 +3,30 @@
     v-if="!loading"
     class="main"
   >
+    <v-btn
+      v-if="role != 'student'"
+      width="200"
+      color="blue"
+      class="white--text"
+      @click="gotoAddCourse"
+    >
+      Add Course
+      <v-icon
+        right
+      >
+        mdi-pencil
+      </v-icon>
+    </v-btn>
+   
     <v-container
       v-if="courses.length > 0"
     >
-      <h4>
-        {{ form }} Courses
-      </h4>
+      <v-row>
+        <h4>
+          {{ form }} Courses
+        </h4>
+      </v-row>
+      
       <br>
     
       <v-container class="grey lighten-5">
@@ -27,9 +45,9 @@
                 rounded
                 @click="onCourseTap(course)"
               >
-                <v-responsive :aspect-ratio="4/2.3">
+                <v-responsive>
                   <v-icon
-                    size="200px"
+                    size="150px"
                   >
                     mdi-book-open-variant
                   </v-icon>
@@ -42,6 +60,51 @@
                 <v-card-subtitle>
                   {{ course.content.length }} lesson(s)
                 </v-card-subtitle>
+                <v-card-actions>
+                  <v-dialog
+                    v-if="role != 'student'"
+                    v-model="dialog"
+                    persistent
+                    max-width="290"
+                  >
+                    <template #activator="{ on, attrs }">
+                      <v-btn
+                        color="red"
+                        dark
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        Delete
+                      </v-btn>
+                    </template>
+                    <v-card>
+                      <v-card-title class="text-h5">
+                        Confirm delete?
+                      </v-card-title>
+                      <v-card-text>
+                        Please note that deleting a course is permanent.
+                        After deleting, this course will not be available to students.
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer />
+                        <v-btn
+                          color="green darken-1"
+                          text
+                          @click="dialog = false"
+                        >
+                          Abort
+                        </v-btn>
+                        <v-btn
+                          color="red darken-1"
+                          text
+                          @click="deleteCourse(course.id)"
+                        >
+                          Confirm
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </v-card-actions>
               </v-card>
             </div>
           </v-col>
@@ -85,8 +148,17 @@
 
 <script>
 
+//  color="#5695E8" // card color
 export default {
+  data () {
+    return {
+      dialog: false
+    };
+  },
   computed: {
+    role() {
+      return this.$store.state.role;
+    },
     courses() {
       return this.$store.getters.getCourses;
     },
@@ -101,11 +173,20 @@ export default {
     this.$store.dispatch('fetchFormCourses');
   },
   methods: {
+    gotoAddCourse() {
+      this.$router.push('/add-course');
+    },
     onCourseTap(course) {
       this.$store.commit('SET_COURSE', course);
 
       // go to course view page
       this.$router.push('/course-detail');
+    },
+    deleteCourse(course_id) {
+      this.dialog = false;
+      this.$store.dispatch('deleteCourse', {'id': course_id});
+
+      this.$store.dispatch('fetchFormCourses');
     }
   }
 

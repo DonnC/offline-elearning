@@ -38,6 +38,9 @@ async def save_upload_file(upload_file: UploadFile, resource_path: str, request:
             'filepath': '',
             'url': '',
         }
+
+        TODO: Use mounted drive as file path
+              Only save file path without base url
     '''
     _resource_path = resource_path.replace('/', '\\')
 

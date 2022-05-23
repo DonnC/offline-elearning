@@ -11,6 +11,8 @@ import FormsVue from '../components/FormsVue.vue';
 import ContentVue from '../components/ContentVue.vue';
 import CourseDetailsVue from '../components/CourseDetailsVue.vue';
 import ResourceVue from '../components/ResourceVue.vue';
+import AddCourseVue from '../components/AddCourseVue.vue';
+import AddCourseContentVue from '../components/AddCourseContentVue.vue';
 import PdfResourceVue from '../components/PdfResourceVue.vue';
 
 Vue.use(VueRouter);
@@ -30,6 +32,16 @@ const routes = [
     path: '/resource',
     name: 'ResourceVue',
     component: ResourceVue
+  },
+  {
+    path: '/add-course',
+    name: 'AddCourseVue',
+    component: AddCourseVue
+  },
+  {
+    path: '/add-course-content',
+    name: 'AddCourseContentVue',
+    component: AddCourseContentVue
   },
   {
     path: '/login',

@@ -12,6 +12,7 @@
           <v-card
             height="200px"
             elevation="6"
+            color="#5695E8"
             rounded
             outlined
             tile
