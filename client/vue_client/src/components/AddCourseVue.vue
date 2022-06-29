@@ -111,6 +111,7 @@ export default {
     },
     reset () {
       this.$refs.form.reset();
+      this.alert = false;
     },
     resetValidation () {
       this.$refs.form.resetValidation();

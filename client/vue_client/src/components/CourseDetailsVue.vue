@@ -6,22 +6,52 @@
       <br>
       {{ course.description }}
     </v-col>
-
-    <v-container>
-      <v-btn
-        color="blue"
-        class="ma-2 white--text"
-        @click="gotoEditor"
-      >
-        Course Resources
-        <v-icon
-          right
+    <LayoutFlexRow>
+      <template #left>
+        <v-btn
+          color="blue"
+          class="ma-2 white--text"
+          @click="gotoCourseResource"
         >
-          mdi-pencil
-        </v-icon>
-      </v-btn>
-      <br>
-    </v-container>
+          Course Resources
+          <v-icon
+            right
+          >
+            mdi-file-multiple
+          </v-icon>
+        </v-btn>
+      </template>
+      <template #right>
+        <v-btn
+          v-if="role != 'student'"
+          color="blue"
+          class="ma-2 white--text"
+          @click="gotoAddContentSection"
+        >
+          Add Content Section
+          <v-icon
+            right
+          >
+            mdi-pencil
+          </v-icon>
+        </v-btn>
+      </template>
+      <template>
+        <v-btn
+          v-if="role != 'student'"
+          color="blue"
+          class="ma-2 white--text"
+          @click="gotoAddCourseContent"
+        >
+          Add Course Content
+          <v-icon
+            right
+          >
+            mdi-pencil
+          </v-icon>
+        </v-btn>
+      </template>
+    </LayoutFlexRow>
     
     <br>
     <br>
@@ -34,7 +64,9 @@
       gap-y="5"
     >
       <v-col>
-        <v-container>
+        <v-container
+          v-if="contents.length > 0"
+        >
           <v-list>
             <v-list-group
               v-for="content in contents"
@@ -61,6 +93,16 @@
             </v-list-group>
           </v-list>
         </v-container>
+
+        <v-container
+          v-else
+        >
+          <center>
+            <div class="p-5">
+              No  {{ course.name }} content found!
+            </div>
+          </center>
+        </v-container>
       </v-col>
     </LayoutColumns>
   </v-container>
@@ -70,7 +112,6 @@
 <script>
 import vueLayoutComponents from 'vue-layout-system';
 import 'vue-layout-system/dist/vue-layout-system.css';
-
 
 export default {
   components: {
@@ -82,6 +123,9 @@ export default {
     };
   },
   computed: {
+    role() {
+      return this.$store.state.role;
+    },
     course() {
       return this.$store.state.course;
     },
@@ -100,6 +144,17 @@ export default {
   methods: {
     gotoContent() {
       this.$router.push('/content');
+    },
+    gotoCourseResource() {
+      this.$store.commit('UPDATE_RESOURCE_FOR', 'course');
+      this.$router.push('/resource');
+    },
+    gotoAddCourseContent() {
+      this.$router.push('/add-course-content');
+    },
+    gotoAddContentSection() {
+      // get content sections
+      this.$router.push('/add-content-section');
     }
   }
 

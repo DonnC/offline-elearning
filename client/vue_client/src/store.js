@@ -15,7 +15,9 @@ export const store = new Vuex.Store({
     section: {
       id: 1
     },
+    content_id: 1,
     resource_url: null,
+    resource_for: null,   // signal to fetch resource for course | section
     courses: [],
     contents: [],
     sections: [],
@@ -69,14 +71,21 @@ export const store = new Vuex.Store({
       token: '',
       isLoggedIn: false,
       userId: -1
+    },
+    error_response: {
+      is_error: false,
+      error_message: ''
     }
   },
   getters: {
     getCourses: (state) => state.courses,
+    getResourceFor: (state) => state.resource_for,
     getCourseContents: (state) => state.contents,
     getLoaderStatus: (state) => state.loading,
     getResourceTabs: (state) => state.resource_tabs,
     getResourceUrl: (state) => state.resource_url,
+    getResources: (state) => state.resources,
+    getErrorResponse: (state) => state.error_response,
     getResourcesByType: (state) => {
       return state.resources.filter(resource => resource.type === state.resource_type.type);
     },
@@ -85,11 +94,20 @@ export const store = new Vuex.Store({
     }
   },
   mutations: {
+    UPDATE_RESOURCE_FOR(state, type) {
+      state.resource_for = type;
+    },
+    UPDATE_CONTENT_ID(state, cont_id) {
+      state.content_id = cont_id;
+    },
     UPDATE_FORM(state, form) {
       state.form = form;
     },
     UPDATE_RESOURCE_URL(state, url) {
       state.resource_url = url;
+    },
+    UPDATE_ERROR_OBJ(state, error_obj) {
+      state.error_response = error_obj;
     },
     UPDATE_RESOURCE_TYPE(state, type) {
       state.resource_type = type;
@@ -149,7 +167,7 @@ export const store = new Vuex.Store({
       commit('UPDATE_LOADING_STATUS', false);
     },
     async fetchCourseContents({ commit, state }) {
-      const path = baseUrl + 'contents/?course_id' + state.course.id + '&skip=' + skip + '&limit=' + fetchLimit;
+      const path = baseUrl + 'contents/?course_id=' + state.course.id + '&skip=' + skip + '&limit=' + fetchLimit;
 
       commit('UPDATE_LOADING_STATUS', true);
 
@@ -158,16 +176,26 @@ export const store = new Vuex.Store({
           commit('SET_CONTENTS', res.data);
         })
         .catch((error) => {
-          // eslint-disable-next-line
-          alert(error);
-          console.error(error);
+          if(error.response) {
+            // eslint-disable-next-line
+            console.error(error.response.data);
+            alert(error.response.data.detail);
+          }
+
+          else {
+            console.log(error.message);
+            console.error(error);
+            alert(error.message);
+          }
+
+          commit('SET_CONTENTS', []);
         });
       
       commit('UPDATE_LOADING_STATUS', false);
     },
     async uploadResource({ commit, state, file, type, is_section }) {
-      const section_path =  baseUrl + 'resources/section/?section_id' + state.section.id + '&type=' + type;
-      const course_path =  baseUrl + 'resources/course/?course_id' + state.course.id + '&type=' + type;
+      const section_path =  baseUrl + 'resources/section/?section_id=' + state.section.id + '&type=' + type;
+      const course_path =  baseUrl + 'resources/course/?course_id=' + state.course.id + '&type=' + type;
 
       const path = is_section ? section_path : course_path;
       
@@ -194,21 +222,53 @@ export const store = new Vuex.Store({
       
       commit('UPDATE_LOADING_STATUS', false);
     },
-    async fetchCourseResources({ commit, state }) {
-      var courseId = state.course.id; 
-      const path = baseUrl + 'resources/course/' + courseId;
+    async fetchResources({ commit, state }) {
+      var is_for = state.resource_for;
+
+      var resource_path;
+
+      console.log(state.resource_url);
+      console.log('getting resources..');
+
+      if(is_for) {
+        if(is_for === 'course') {
+          var type_id  = state.course.id; 
+          resource_path = baseUrl + 'resources/course/' + type_id;
+        }
+
+        else {
+          var sec_id  = state.section.id; 
+          resource_path = baseUrl + 'resources/section/' + sec_id;
+        }
+      }
+
+      else {
+        return;
+      }
 
       commit('UPDATE_LOADING_STATUS', true);
 
-      axios.get(path)
+      console.log('fetching resources');
+
+      axios.get(resource_path)
         .then((res) => {
+          console.log('result');
+          console.log(res.data);
           commit('SET_RESOURCES', res.data);
        
         })
         .catch((error) => {
-          // eslint-disable-next-line
-          alert(error);
-          console.error(error);
+          if(error.response) {
+            // eslint-disable-next-line
+            console.error(error.response.data);
+            alert(error.response.data.detail);
+          }
+
+          else {
+            console.log(error.message);
+            console.error(error);
+            alert(error.message);
+          }
         });
 
       commit('UPDATE_LOADING_STATUS', false);
@@ -257,14 +317,15 @@ export const store = new Vuex.Store({
       
       commit('UPDATE_LOADING_STATUS', true);
 
+      commit('UPDATE_ERROR_OBJ', {
+        is_error: false,
+        error_message: ''
+      });
+
       console.log(pp);
 
       axios.post(path, pp)
         .then((res) => {
-          // ! token needed TODO Add proper token
-          // localStorage.setItem('todo_items', JSON.stringify(this.todo_items));
-          // if (localStorage.getItem('todo_items'))
-          // this.todo_items = JSON.parse(localStorage.getItem('todo_items'));
 
           console.log(res.data);
           
@@ -293,14 +354,21 @@ export const store = new Vuex.Store({
         .catch((error) => {
           if(error.response) {
             // eslint-disable-next-line
-            console.error(error.response.data);
-            alert(error.response.data.detail);
+            commit('UPDATE_ERROR_OBJ', {
+              is_error: true,
+              error_message: error.response.data.detail
+            });
+
+            //alert(error.response.data.detail);
           }
 
           else {
-            console.log(error.message);
-            console.error(error);
-            alert(error.message);
+            commit('UPDATE_ERROR_OBJ', {
+              is_error: true,
+              error_message: error.message
+            });
+
+            //alert(error.message);
           }
         });
 
@@ -316,6 +384,68 @@ export const store = new Vuex.Store({
       console.log(pp);
 
       axios.post(path, pp)
+        .then((res) => {
+          console.log(res.data);
+          
+        })
+        .catch((error) => {
+          if(error.response) {
+            // eslint-disable-next-line
+            console.error(error.response.data);
+            alert(error.response.data.detail);
+          }
+
+          else {
+            console.log(error.message);
+            console.error(error);
+            alert(error.message);
+          }
+        });
+
+      commit('UPDATE_LOADING_STATUS', false);
+
+    },
+    async addCourseContent({ commit, state }, pp) {
+      // .. /courses/?form=form1
+      const path = baseUrl + 'contents/' + state.course.id;
+      
+      commit('UPDATE_LOADING_STATUS', true);
+
+      console.log(pp);
+
+      axios.post(path, pp)
+        .then((res) => {
+          console.log(res.data);
+          
+        })
+        .catch((error) => {
+          if(error.response) {
+            // eslint-disable-next-line
+            console.error(error.response.data);
+            alert(error.response.data.detail);
+          }
+
+          else {
+            console.log(error.message);
+            console.error(error);
+            alert(error.message);
+          }
+        });
+
+      commit('UPDATE_LOADING_STATUS', false);
+
+    },
+    async addContentSection({ commit }, pp) {
+      const path = baseUrl + 'sections/' + pp.content + '/';
+      
+      commit('UPDATE_LOADING_STATUS', true);
+
+      console.log(pp);
+
+      axios.post(path, {
+        'title': pp.title,
+        'data': ''
+      })
         .then((res) => {
           console.log(res.data);
           

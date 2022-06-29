@@ -4,10 +4,10 @@
       <h4> Course Content Editor </h4>
       <br><br>
     </center>
-    <v-breadcrumbs
+    <!-- <v-breadcrumbs
       :items="items"
       large
-    />
+    /> -->
     
     <v-alert
       v-if="showAlert"

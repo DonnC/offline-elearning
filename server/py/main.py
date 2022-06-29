@@ -31,8 +31,6 @@ app.add_middleware(
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# app.include_router(book_test.router)
-
 app.include_router(users.router)
 
 app.include_router(courses.router)

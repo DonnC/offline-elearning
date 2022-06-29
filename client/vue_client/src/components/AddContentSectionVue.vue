@@ -13,7 +13,7 @@
     </v-alert>
     
     <v-card-text>
-      <div> Add New {{ form }} {{ course.name }} Content </div>
+      <div> Add New {{ form }} {{ course.name }} Content Section </div>
     </v-card-text>
 
     <div class="p-3">
@@ -22,16 +22,15 @@
         v-model="valid"
         lazy-validation
       >
+        <v-select
+          v-model="content"
+          label="Content Section"
+          :items="contents"
+        />
+        
         <v-text-field
           v-model="name"
-          label="Topic Name"
-          required
-        />
-
-        <v-textarea
-          v-model="description"
-          label="Description"
-          placeholder="a short description about this content topic"
+          label="Section Title"
           required
         />
 
@@ -64,7 +63,7 @@ export default {
   data: () => ({
     valid: true,
     name: '',
-    description: '',
+    content: null,
     loading: false,
     alert: false,
     alertType: 'success',
@@ -76,10 +75,17 @@ export default {
     },
     course() {
       return this.$store.state.course;
+    },
+    contents() {
+      return  this.$store.getters.getCourseContents.map(
+        function(elem) {
+          return elem.topic;
+        }
+      );
     }
   },
   mounted() {
-    this.$store.dispatch('fetchFormCourses');
+    this.$store.dispatch('fetchCourseContents');
   },
   methods: {
     validate () {
@@ -94,19 +100,21 @@ export default {
       this.$refs.form.resetValidation();
     },
     saveCourse() {
-      if(this.name.length === 0 || this.description.length  === 0) {
+      if(this.name.length === 0 || this.content  === null) {
         return;
       }
 
-      this.$store.dispatch('addCourseContent',  {
-        'topic': this.name,
-        'description': this.description
-        // 'course_id': this.course.id
+      var content_p = this.$store.getters.getCourseContents.find(cont => cont.topic === this.content);
+
+      this.$store.dispatch('addContentSection',  {
+        'title': this.name,
+        'data': '',
+        'content': content_p.id
       });
 
       this.reset();
       this.alert = true;
-      this.alertMsg = 'Course content added successfully';
+      this.alertMsg = 'Content section added successfully';
       this.alertType = 'success';
     }
   }

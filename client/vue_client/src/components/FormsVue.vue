@@ -1,5 +1,20 @@
 <template>
   <v-container class="grey lighten-5">
+    <v-btn
+      v-if="role === 'admin'"
+      width="200"
+      color="blue"
+      class="white--text"
+      @click="gotoAddCourse"
+    >
+      Add Teacher
+      <v-icon
+        right
+      >
+        mdi-user
+      </v-icon>
+    </v-btn>
+    
     <v-row
       style="height: 150px;"
     >
@@ -69,7 +84,6 @@ export default {
     updateForm(form) {
       this.$store.commit('UPDATE_FORM', form);
 
-      // go to router
       this.$router.push('/courses');
     }
   }

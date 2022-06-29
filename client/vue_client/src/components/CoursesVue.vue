@@ -179,6 +179,8 @@ export default {
     onCourseTap(course) {
       this.$store.commit('SET_COURSE', course);
 
+      this.$store.commit('SET_CONTENTS', []);
+
       // go to course view page
       this.$router.push('/course-detail');
     },

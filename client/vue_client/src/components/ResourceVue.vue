@@ -97,6 +97,7 @@ export default {
   },
 
   computed: {
+    
     tabs() {
       return this.$store.getters.getResourceTabs;
     },
@@ -108,7 +109,8 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('fetchCourseResources');
+    this.$store.dispatch('fetchResources');
+    this.resources = this.$store.getters.getResourcesByType;
   },
   
   methods: {
