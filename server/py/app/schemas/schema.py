@@ -1,5 +1,6 @@
 
 from pydantic import BaseModel
+from typing import Union, List
 from datetime import datetime
 
 
@@ -67,8 +68,8 @@ class Section(SectionBase):
     content_id: int
     created_on: datetime
     updated_on: datetime
-    resources: list[Resource] = []
-    user_id: int | None = None
+    resources: List[Resource] = []
+    user_id: Union[int , None] = None
     
     class Config:
         orm_mode = True
@@ -85,7 +86,7 @@ class ContentCreate(ContentBase):
 class Content(ContentBase):
     id: int
     course_id: int
-    sections: list[Section] = []
+    sections: List[Section] = []
     created_on: datetime
     updated_on: datetime
     
@@ -95,11 +96,11 @@ class Content(ContentBase):
 
 ################################## COURSE ################
 class CourseBase(BaseModel):
-    form: str | None = None
+    form: Union[str , None] = None
     name: str
-    description: str | None = None
-    synopsis: str | None = None
-    color: str | None = None
+    description: Union[str , None] = None
+    synopsis: Union[str , None] = None
+    color: Union[str , None] = None
     
 
 class CourseCreate(CourseBase):
@@ -108,8 +109,8 @@ class CourseCreate(CourseBase):
 
 class Course(CourseBase):
     id: int
-    content: list[Content] = []
-    resources: list[Resource] = []
+    content: List[Content] = []
+    resources: List[Resource] = []
     created_on: datetime
     updated_on: datetime
 

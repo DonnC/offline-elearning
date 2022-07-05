@@ -1,5 +1,6 @@
 # main media file uploader
 from os import path, makedirs, remove
+import platform
 
 from fastapi import Request, UploadFile
 
@@ -41,13 +42,25 @@ async def save_upload_file(upload_file: UploadFile, resource_path: str, request:
 
         TODO: Use mounted drive as file path
               Only save file path without base url
+
+        import shutil
+        shutil.copy(src="C:/Test/Original.txt", dst="F:/Original.txt")  
     '''
-    _resource_path = resource_path.replace('/', '\\')
+    print(upload_file.filename)
+    print("[UPLOAD] Resource path: ", resource_path)
+
+    _resource_path = resource_path
+
+    # check platform
+    if platform.system() == 'Windows':
+        _resource_path = resource_path.replace('/', '\\')
 
     _path_dir = path.join(STATIC_DIR, _resource_path)
 
     if not path.isdir(_path_dir):
         makedirs(_path_dir)
+
+    print("[UPLOAD] Dir path: ", _path_dir)
 
     file_path = path.join(_resource_path, upload_file.filename)
 

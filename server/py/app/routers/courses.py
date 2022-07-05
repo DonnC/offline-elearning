@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union, List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import  Session
 from app.constants.constants import FETCH_LIMIT
@@ -29,7 +29,7 @@ async def create_course(course: schema.CourseCreate,  form: GradeEnum, db: Sessi
     
     return crud.create_course(db=db, course=course)
 
-@router.get("/", response_model=list[schema.Course])
+@router.get("/", response_model=List[schema.Course])
 async def read_courses(form: Optional[GradeEnum] = None, skip: int = 0, limit: int = FETCH_LIMIT, db: Session = Depends(get_db)):
     courses = crud.get_courses(db, skip=skip, limit=limit, form=form)
     return courses

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List, Union
 from fastapi import APIRouter, Depends, HTTPException, Request, UploadFile
 from sqlmodel import  Session
 
@@ -31,23 +31,23 @@ async def read_resource(resource_id: int, db: Session = Depends(get_db)):
     
     return db_res
 
-@router.get("/", response_model=list[schema.Resource])
+@router.get("/", response_model=List[schema.Resource])
 async def read_resources(skip: int = 0, limit: int = FETCH_LIMIT, db: Session = Depends(get_db)):
     res = crud.get_resources(db, skip=skip, limit=limit)
     return res
 
-@router.get("/type/", response_model=list[schema.Resource])
+@router.get("/type/", response_model=List[schema.Resource])
 async def get_resource_by_type(type: ResourceTypeEnum, db: Session = Depends(get_db)):
     res = crud.get_resource_by_type(db, type)
     return res
 
-@router.get("/parent/", response_model=list[schema.Resource])
+@router.get("/parent/", response_model=List[schema.Resource])
 async def get_resource_by_parent(parent: ResourceParent, db: Session = Depends(get_db)):
     res = crud.get_resource_by_parent(db, parent)
     return res
 
 
-@router.get("/section/{section_id}", response_model=list[schema.Resource])
+@router.get("/section/{section_id}", response_model=List[schema.Resource])
 async def get_section_resources(section_id: int,  type: Optional[ResourceTypeEnum] = None, db: Session = Depends(get_db)):
     section = scrud.get_section(db, section_id=section_id)
 
@@ -61,7 +61,7 @@ async def get_section_resources(section_id: int,  type: Optional[ResourceTypeEnu
         raise HTTPException(status_code=400, detail=f"failed to get section resources: {err}")
 
 
-@router.get("/course/{course_id}", response_model=list[schema.Resource])
+@router.get("/course/{course_id}", response_model=List[schema.Resource])
 async def get_course_resources(course_id: int,  type: Optional[ResourceTypeEnum] = None, db: Session = Depends(get_db)):
     course = c_crud.get_course(db, course_id=course_id)
 

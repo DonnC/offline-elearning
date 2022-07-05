@@ -1,4 +1,5 @@
 from fastapi import APIRouter, UploadFile, Request
+from typing import List
 
 from media_file_uploader import save_upload_file
 
@@ -28,7 +29,7 @@ async def create_upload_file(file: UploadFile, resource_path: str, request: Requ
 
 @router.post("/uploadfiles/")
 async def create_upload_files(
-    files: list[UploadFile], resource_path: str, request: Request
+    files: List[UploadFile], resource_path: str, request: Request
 ):
 
     saved_files = []
