@@ -42,6 +42,7 @@ async def save_upload_file(upload_file: UploadFile, resource_path: str, request:
 
         TODO: Use mounted drive as file path
               Only save file path without base url
+        TODO: Copy file to mounted drive
 
         import shutil
         shutil.copy(src="C:/Test/Original.txt", dst="F:/Original.txt")  
@@ -69,7 +70,10 @@ async def save_upload_file(upload_file: UploadFile, resource_path: str, request:
     with open(file_location, "wb+") as file_object:
         file_object.write(upload_file.file.read())
 
-    _f_path = file_path.replace('\\', '/')
+    _f_path = file_path
+
+    if platform.system() == 'Windows':
+        _f_path = file_path.replace('\\', '/')
 
     file_url = request.url_for(STATIC_DIR, path=_f_path)
 
