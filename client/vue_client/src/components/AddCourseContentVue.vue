@@ -105,9 +105,9 @@ export default {
       });
 
       this.reset();
-      this.alert = true;
-      this.alertMsg = 'Course content added successfully';
-      this.alertType = 'success';
+      // this.alert = true;
+      // this.alertMsg = 'Course content added successfully';
+      // this.alertType = 'success';
     }
   }
 };

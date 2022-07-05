@@ -18,10 +18,15 @@ export const store = new Vuex.Store({
     content_id: 1,
     resource_url: null,
     resource_for: null,   // signal to fetch resource for course | section
+    current_source_resource: {
+      name: '',     // section | course
+      id: -1        // source id
+    }, 
     courses: [],
     contents: [],
     sections: [],
     resources: [],
+    teachers: [],
     resource_type: {
       name: 'Books',
       icon: 'mdi-book-open-page-variant-outline',
@@ -85,17 +90,33 @@ export const store = new Vuex.Store({
     getResourceTabs: (state) => state.resource_tabs,
     getResourceUrl: (state) => state.resource_url,
     getResources: (state) => state.resources,
+    getTeachers: (state) => state.teachers.filter(staff => staff.is_admin === false),
     getErrorResponse: (state) => state.error_response,
     getResourcesByType: (state) => {
       return state.resources.filter(resource => resource.type === state.resource_type.type);
     },
     getResourceById: (state) => (id) => {
       return state.resources.find(resource => resource.id === id);
-    }
+    },
+    getCurrentResourceSource: (state) => state.current_source_resource
   },
   mutations: {
+    LOGOUT(state) {
+      state.authUser = {
+        token: '',
+        isLoggedIn: false,
+        userId: -1
+      };
+      state.role = 'student';
+    },
     UPDATE_RESOURCE_FOR(state, type) {
       state.resource_for = type;
+    },
+    UPDATE_TEACHERS(state, staff) {
+      state.teachers = staff;
+    },
+    UPDATE_CURRENT_SOURCE_RESOURCE(state, res) {
+      state.current_source_resource = res;
     },
     UPDATE_CONTENT_ID(state, cont_id) {
       state.content_id = cont_id;
@@ -496,6 +517,92 @@ export const store = new Vuex.Store({
 
       commit('UPDATE_LOADING_STATUS', false);
 
-    } 
+    },
+    async deleteResource({ commit }, pp) {
+      const path = baseUrl + 'resources/' + pp.id;
+      
+      commit('UPDATE_LOADING_STATUS', true);
+
+      console.log(pp);
+
+      axios.delete(path)
+        .then((res) => {
+          console.log(res.data);
+          
+        })
+        .catch((error) => {
+          if(error.response) {
+            // eslint-disable-next-line
+            console.error(error.response.data);
+            alert(error.response.data.detail);
+          }
+
+          else {
+            console.log(error.message);
+            console.error(error);
+            alert(error.message);
+          }
+        });
+
+      commit('UPDATE_LOADING_STATUS', false);
+
+    },
+    async fetchTeachers({ commit }) {
+      const path = baseUrl + 'users/';
+      
+      commit('UPDATE_LOADING_STATUS', true);
+
+      axios.get(path)
+        .then((res) => {
+          console.log(res.data);
+          
+          commit('UPDATE_TEACHERS', res.data);
+        })
+        .catch((error) => {
+          if(error.response) {
+            // eslint-disable-next-line
+            console.error(error.response.data);
+            alert(error.response.data.detail);
+          }
+
+          else {
+            console.log(error.message);
+            console.error(error);
+            alert(error.message);
+          }
+        });
+
+      commit('UPDATE_LOADING_STATUS', false);
+
+    },
+    async deleteTeacher({ commit }, pp) {
+      const path = baseUrl + 'users/' + pp.id;
+      
+      commit('UPDATE_LOADING_STATUS', true);
+
+      console.log(pp);
+
+      axios.delete(path)
+        .then((res) => {
+          console.log(res.data);
+          
+        })
+        .catch((error) => {
+          if(error.response) {
+            // eslint-disable-next-line
+            console.error(error.response.data);
+            alert(error.response.data.detail);
+          }
+
+          else {
+            console.log(error.message);
+            console.error(error);
+            alert(error.message);
+          }
+        });
+
+      commit('UPDATE_LOADING_STATUS', false);
+
+    }
   }
 });

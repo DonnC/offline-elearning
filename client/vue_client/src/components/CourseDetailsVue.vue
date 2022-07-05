@@ -6,9 +6,25 @@
       <br>
       {{ course.description }}
     </v-col>
-    <LayoutFlexRow>
+    <v-btn
+      v-if="role === 'student'"
+      color="blue"
+      class="ma-2 white--text"
+      @click="gotoCourseResource"
+    >
+      Course Resources
+      <v-icon
+        right
+      >
+        mdi-file-multiple
+      </v-icon>
+    </v-btn>
+   
+    <LayoutFlexRow
+      v-if="role != 'student'"
+    >
       <template #left>
-        <v-btn
+        <v-btn    
           color="blue"
           class="ma-2 white--text"
           @click="gotoCourseResource"
@@ -147,6 +163,10 @@ export default {
     },
     gotoCourseResource() {
       this.$store.commit('UPDATE_RESOURCE_FOR', 'course');
+      this.$store.commit('UPDATE_CURRENT_SOURCE_RESOURCE', {
+        name: 'course',    
+        id: this.course.id      
+      });
       this.$router.push('/resource');
     },
     gotoAddCourseContent() {

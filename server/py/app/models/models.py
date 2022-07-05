@@ -55,7 +55,7 @@ class Content(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     # content topic | title
-    topic = Column(String, index=True, unique=True)
+    topic = Column(String, index=True)
     # short description about this content
     description = Column(String)
     created_on = Column(DateTime(timezone=True), server_default=sql.func.now())
@@ -75,7 +75,7 @@ class Section(Base):
     __tablename__ = "sections"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True, unique=True)
+    title = Column(String, index=True)
     data = Column(String, default="")
 
     created_on = Column(DateTime(timezone=True), server_default=sql.func.now())

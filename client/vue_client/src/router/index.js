@@ -9,6 +9,8 @@ import HomePageVue from '../components/HomePageVue.vue';
 import VideoPlayerVue from '../components/VideoPlayerVue.vue';
 import FormsVue from '../components/FormsVue.vue';
 import ContentVue from '../components/ContentVue.vue';
+import AddStaffVue from '../components/AddStaffVue.vue';
+import StaffVue from '../components/StaffVue.vue';
 import CourseDetailsVue from '../components/CourseDetailsVue.vue';
 import ResourceVue from '../components/ResourceVue.vue';
 import AddCourseVue from '../components/AddCourseVue.vue';
@@ -58,6 +60,16 @@ const routes = [
     path: '/content',
     name: 'ContentVue',
     component: ContentVue
+  },
+  {
+    path: '/add-staff',
+    name: 'AddStaffVue',
+    component: AddStaffVue
+  },
+  {
+    path: '/admin-staff',
+    name: 'StaffVue',
+    component: StaffVue
   },
   {
     path: '/course-detail',

@@ -89,7 +89,7 @@
        
           <br>
           <div
-            v-if="section.data.length != 0"
+            v-if="section.data"
             v-html="section.data"
           />
 
@@ -142,12 +142,19 @@ export default {
       this.$router.push('/editor');
     },
     updateSelected(sec) {
+      console.log('updating section');
+      console.log(sec);
+      
       this.$store.commit('SET_SECTION', sec);
 
       this.selectedSection = sec.id;
     },
     gotoSectionResource() {
       this.$store.commit('UPDATE_RESOURCE_FOR', 'section');
+      this.$store.commit('UPDATE_CURRENT_SOURCE_RESOURCE', {
+        name: 'section',    
+        id: this.section.id      
+      });
       this.$router.push('/resource');
     }
   }

@@ -1,20 +1,5 @@
 <template>
   <v-container class="grey lighten-5">
-    <v-btn
-      v-if="role === 'admin'"
-      width="200"
-      color="blue"
-      class="white--text"
-      @click="gotoAddCourse"
-    >
-      Add Teacher
-      <v-icon
-        right
-      >
-        mdi-user
-      </v-icon>
-    </v-btn>
-    
     <v-row
       style="height: 150px;"
     >
@@ -34,10 +19,14 @@
             @click="updateForm(form.grade)"
           >
             <div
-              class="text-center"
+              class="text-center p-4"
               align="center"
             >
-              {{ form.name }}
+              <br>
+              <br>
+              <p>
+                {{ form.name }}
+              </p> 
             </div>
           </v-card>
         </div>

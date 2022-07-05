@@ -13,7 +13,7 @@
     </v-alert>
 
     <v-card-text>
-      <div>Welcome {{ role }} - Login to proceed</div>
+      <div> Add New Staff Member </div>
     </v-card-text>
 
     <div class="p-3">
@@ -24,7 +24,7 @@
       >
         <v-text-field
           v-model="name"
-          label="Username"
+          label="Teacher Username"
           :rules="[rules.required]"
           required
         />
@@ -34,7 +34,7 @@
           :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
           :rules="[rules.required]"
           :type="show1 ? 'text' : 'password'"
-          label="Password"
+          label="Teacher Password"
           @click:append="show1 = !show1"
         />
         <div class="p-4">
@@ -44,7 +44,7 @@
             class="mr-4"
             @click="validate"
           >
-            Login
+            Submit
           </v-btn>
 
           <v-btn
@@ -98,12 +98,11 @@ export default {
     if(this.$store.state.role === 'student') {
       this.$router.replace('/');
     }
-
   },
   methods: {
     validate () {
       if(this.role === 'student') {
-        this.$router.push('/forms');
+        this.$router.replace('/forms');
       }
     
       this.$refs.form.validate();
@@ -112,7 +111,6 @@ export default {
     },
     reset () {
       this.$refs.form.reset();
-      this.alert = false;
       this.$store.commit('UPDATE_ERROR_OBJ', {
         is_error: false,
         error_message: ''
@@ -121,50 +119,35 @@ export default {
     resetValidation () {
       this.$refs.form.resetValidation();
     },
+    // register
     async login() {
       if(this.name.length === 0 || this.password.length  === 0) {
         return;
       }
 
       if(this.role === 'student') {
-        this.$router.push('/forms');
+        this.$router.replace('/forms');
       }
 
       try {
-        const path = baseUrl + 'users/login';
+        const path = baseUrl + 'users/register';
+
 
         var res = await axios.post(path, {
           'name': this.name,
-          'password': this.password
+          'password': this.password,
+          'is_admin': false,
+          'is_teacher': true,
+          'is_student': false
         });
 
-       
         console.log(res.data);
           
-        var _role = 'student';
+        this.alert = true;
+        this.alertType = 'success';
+        this.alertMsg = 'New Teacher added successfully';
 
-        var isAdmin = res.data.is_admin;
-
-        if(isAdmin) {
-          _role = 'admin';
-        }
-
-        else {
-          _role = 'teacher';
-        }
-
-        var pl = {
-          token: '82sshuds9sd9sdhd9dsy',
-          isLoggedIn: true,
-          userId: res.data.id
-        };
-
-        this.$store.commit('UPDATE_AUTH_USER', pl);
-
-        this.$store.commit('UPDATE_USER_ROLE', _role);
-        
-        this.$router.push('/forms');
-
+        this.reset();
       }
 
       catch (error) {

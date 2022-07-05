@@ -3,20 +3,25 @@
     v-if="!loading"
     class="main"
   >
-    <v-btn
-      v-if="role != 'student'"
-      width="200"
-      color="blue"
-      class="white--text"
-      @click="gotoAddCourse"
+    <div
+      class="p-4"
     >
-      Add Course
-      <v-icon
-        right
+      <v-btn
+        v-if="role != 'student'"
+        width="200"
+        color="blue"
+        class="white--text"
+        @click="gotoAddCourse"
       >
-        mdi-pencil
-      </v-icon>
-    </v-btn>
+        Add Course
+        <v-icon
+          right
+        >
+          mdi-pencil
+        </v-icon>
+      </v-btn>
+    </div>
+   
    
     <v-container
       v-if="courses.length > 0"
@@ -47,6 +52,7 @@
               >
                 <v-responsive>
                   <v-icon
+                    class="pl-12"
                     size="150px"
                   >
                     mdi-book-open-variant

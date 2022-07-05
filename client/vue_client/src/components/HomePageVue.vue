@@ -13,8 +13,7 @@
             max-width="340px"
             elevation="4"
             color="blue"
-            to="/forms"
-            @click="updateRole('student')"
+            @click="studentLogic('student')"
           >
             <center>
               <v-col
@@ -45,8 +44,7 @@
             max-width="340px"
             elevation="4"
             color="blue"
-            to="/login"
-            @click="updateRole('teacher')"
+            @click="staffLogic('teacher')"
           >
             <center>
               <v-col
@@ -77,8 +75,7 @@
             max-width="340px"
             elevation="4"
             color="blue"
-            to="/login"
-            @click="updateRole('admin')"
+            @click="staffLogic('admin')"
           >
             <center>
               <v-col
@@ -113,9 +110,79 @@ export default {
     AccountTie,
     ShieldAccount
   },
+  computed: {
+    role() {
+      return this.$store.state.role;
+    },
+    authUser() {
+      return this.$store.state.authUser;
+    }
+  },
   methods: {
     updateRole(user) {
       this.$store.commit('UPDATE_USER_ROLE', user);
+    },
+    staffLogic(user) {
+      // if(this.role === 'student') {
+      //   return;
+      // }
+
+      console.log(user);
+      console.log(this.authUser);
+      console.log(this.role);
+
+      var status = this.authUser;
+
+      console.log(status.isLoggedIn);
+
+      // if(this.role === 'student' && user != 'student') {
+
+      // }
+
+      if(this.role === user) {
+        if(status.isLoggedIn === true) {
+          this.$router.replace('/forms');
+        }
+
+        else {
+          this.$store.commit('LOGOUT');
+          this.$store.commit('UPDATE_USER_ROLE', user);
+          this.$router.replace('/login');
+        }
+      }
+
+      else {
+        if(this.role === 'admin' && user === 'teacher') {
+          if(status.isLoggedIn === true) {
+            this.$router.replace('/forms');
+          }
+
+          else {
+            this.$store.commit('LOGOUT');
+            this.$store.commit('UPDATE_USER_ROLE', user);
+            this.$router.replace('/login');
+          }
+        }
+
+        else {
+          this.$store.commit('LOGOUT');
+          this.$store.commit('UPDATE_USER_ROLE', user);
+          this.$router.replace('/login');
+        }
+      }
+
+    },
+    studentLogic(user) {
+      if(this.role === user) {
+        this.$store.commit('LOGOUT');
+        this.$store.commit('UPDATE_USER_ROLE', user);
+        this.$router.replace('/forms');
+      }
+
+      else {
+        this.$store.commit('UPDATE_USER_ROLE', user);
+        this.$router.replace('/forms');
+      }
     }
   }
 };
