@@ -4,8 +4,9 @@
   >
     <v-alert
       v-model="alert"
-      type="alertType"
+      shaped
       dismissible
+      :type="alertType"
     >
       {{ alertMsg }}
     </v-alert>
@@ -39,7 +40,10 @@
           <v-col
             v-for="resource in resources"
             :key="resource.id"
-            cols="2"
+            cols="12"
+            md="6"
+            lg="4"
+            xl="4"
           >
             <div class="p-1">
               <v-card
@@ -308,7 +312,7 @@ export default {
 
       catch(error) {
         this.alert = true;
-        this.alertType = 'danger';
+        this.alertType = 'warning';
         this.alertMsg = error.response.data.detail;
       }
     }

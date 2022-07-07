@@ -35,13 +35,14 @@
       <br>
     
       <v-container class="grey lighten-5">
-        <v-row
-          style="height: 150px;"
-        >
+        <v-row>
           <v-col
             v-for="course in courses"
             :key="course.id"
-            cols="4"
+            cols="12"
+            md="6"
+            lg="4"
+            xl="4"
           >
             <div class="p-4">
               <v-card

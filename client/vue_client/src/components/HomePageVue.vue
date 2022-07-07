@@ -1,10 +1,110 @@
 <template>
   <v-container fluid>
-    <v-row
-      style="height: 100px;"
-    >
+    <v-row>
       <v-col
-        cols="4"
+        cols="12"
+        sm="6"
+        md="3"
+        lg="3"
+        xl="3"
+      >
+        <div class="p-2">
+          <v-card
+            class="max-auto"
+            height="200px"
+            max-width="340px"
+            elevation="4"
+            color="blue"
+            @click="studentLogic('student')"
+          >
+            <center>
+              <v-col
+                align-self="center"
+                cols="auto"
+              >
+                <account-details
+                  fill-color="white"
+                  :size="80"
+                />
+                <v-container />
+                <h5>
+                  Student
+                </h5>
+              </v-col>
+            </center>
+          </v-card>
+        </div>
+      </v-col>
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
+        lg="3"
+        xl="3"
+      >
+        <div class="p-2">
+          <v-card
+            class="max-auto"
+            height="200px"
+            max-width="340px"
+            elevation="4"
+            color="blue"
+            @click="staffLogic('teacher')"
+          >
+            <center>
+              <v-col
+                align-self="center"
+                cols="auto"
+              >
+                <account-tie
+                  fill-color="white"
+                  :size="80"
+                />
+                <v-container />
+                <h5>
+                  Teacher
+                </h5>
+              </v-col>
+            </center>
+          </v-card>
+        </div>
+      </v-col>
+      <v-col
+        cols="12"
+        sm="6"
+        md="3"
+        lg="3"
+        xl="3"
+      >
+        <div class="p-2">
+          <v-card
+            class="max-auto"
+            height="200px"
+            max-width="340px"
+            elevation="4"
+            color="blue"
+            @click="staffLogic('admin')"
+          >
+            <center>
+              <v-col
+                align-self="center"
+                cols="auto"
+              >
+                <shield-account
+                  fill-color="white"
+                  :size="80"
+                />
+                <v-container />
+                <h5>
+                  Admin
+                </h5>
+              </v-col>
+            </center>
+          </v-card>
+        </div>
+      </v-col>
+      <!-- <v-col
+        cols="6"
       >
         <div class="p-2">
           <v-card
@@ -35,7 +135,7 @@
       </v-col>
 
       <v-col
-        cols="4"
+        cols="6"
       >
         <div class="p-2">
           <v-card
@@ -66,7 +166,7 @@
       </v-col>
 
       <v-col
-        cols="4"
+        cols="6"
       >
         <div class="p-2">
           <v-card
@@ -94,7 +194,7 @@
             </center>
           </v-card>
         </div>
-      </v-col>
+      </v-col> -->
     </v-row>
   </v-container>
 </template>

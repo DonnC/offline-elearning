@@ -1,11 +1,9 @@
 <template>
-  <div class="player-container p-4">
+  <div class="player-container p-3">
     <div
       v-if="url"
     >
-      <v-card
-        height="500px"
-      >
+      <v-card>
         <vue-core-video-player
           :src="url"
         />
@@ -23,7 +21,9 @@
 </template>
 
 <script>
+
 export default {
+
   computed: {
     url() {
       return this.$store.getters.getResourceUrl;
@@ -31,3 +31,4 @@ export default {
   }
 };
 </script>
+

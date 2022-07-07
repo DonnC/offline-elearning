@@ -6,8 +6,9 @@
   >
     <v-alert
       v-model="alert"
-      type="alertType"
+      shaped
       dismissible
+      :type="alertType"
     >
       {{ alertMsg }}
     </v-alert>
@@ -95,6 +96,9 @@ export default {
     },
     saveCourse() {
       if(this.name.length === 0 || this.description.length  === 0) {
+        this.alert = true;
+        this.alertMsg = 'name and description is required';
+        this.alertType = 'warning';
         return;
       }
 
@@ -104,10 +108,11 @@ export default {
         // 'course_id': this.course.id
       });
 
+      
+      this.alert = true;
+      this.alertMsg = 'Course content added successfully';
+      this.alertType = 'success';
       this.reset();
-      // this.alert = true;
-      // this.alertMsg = 'Course content added successfully';
-      // this.alertType = 'success';
     }
   }
 };

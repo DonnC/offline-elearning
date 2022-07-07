@@ -1,5 +1,7 @@
 from datetime import datetime
 
+import uvicorn
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -50,3 +52,6 @@ async def root():
         "app": "OeRMS",
         "date": datetime.now()
     }
+
+if __name__ == '__main__':
+    uvicorn.run(app, host='0.0.0.0')

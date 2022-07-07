@@ -26,10 +26,10 @@ async def create_content(course_id: int, content: schema.ContentCreate, db: Sess
     if not course_:
         raise HTTPException(status_code=400, detail="no course found matching given id")
 
-    db_content = crud.get_content_by_topic(db, topic=content.topic)
+    # db_content = crud.get_content_by_topic(db, topic=content.topic)
 
-    if db_content:
-        raise HTTPException(status_code=400, detail="Content already exists")
+    # if db_content:
+    #     raise HTTPException(status_code=400, detail="Content already exists")
     
     return crud.create_course_content(db=db, content=content, course_id=course_id)
 

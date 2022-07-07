@@ -15,6 +15,7 @@ export const store = new Vuex.Store({
     section: {
       id: 1
     },
+    editor_content: '',
     content_id: 1,
     resource_url: null,
     resource_for: null,   // signal to fetch resource for course | section
@@ -111,6 +112,9 @@ export const store = new Vuex.Store({
     },
     UPDATE_RESOURCE_FOR(state, type) {
       state.resource_for = type;
+    },
+    UPDATE_EDITOR_CONTENT(state, cont) {
+      state.editor_content = cont;
     },
     UPDATE_TEACHERS(state, staff) {
       state.teachers = staff;

@@ -24,7 +24,7 @@
                 v-for="sec in content.sections"
                 :key="sec.id"
                
-                @click="updateSelected(sec)"
+                @click="updateSelected(content, sec)"
               >
                 <v-list-item-content>
                   <div :style="{color: sec.id === selectedSection ? 'dodgerblue' : 'slategrey'}">
@@ -141,10 +141,12 @@ export default {
     gotoEditor() {
       this.$router.push('/editor');
     },
-    updateSelected(sec) {
+    updateSelected(cont, sec) {
+      console.log('received cont');
+      console.log(cont);
       console.log('updating section');
       console.log(sec);
-      
+      this.$store.commit('UPDATE_EDITOR_CONTENT', cont.topic);
       this.$store.commit('SET_SECTION', sec);
 
       this.selectedSection = sec.id;

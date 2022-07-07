@@ -1,42 +1,35 @@
 <template>
   <div class="container">
-    <button
-      type="button"
-      class="btn btn-primary"
+    <div
+      v-if="url"
     >
-      {{ msg }}
-    </button>
+      <iframe
+        :src="url"
+        width="100%"
+        height="100"
+        frameborder="0"
+      />
+    </div>
+
+    <div
+      v-else
+    >
+      <center>
+        Failed to get resource 
+      </center>
+    </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-import { baseUrl } from '../constants/constants.js';
-
 export default {
-  name: 'PingVue',
-    
-  data() {
-    return {
-      msg: 'Hello!'
-    };
-  },
-  created() {
-    this.getMessage();
-  },
-  methods: {
-    getMessage() {
-      const path = baseUrl + 'ping';
-
-      axios.get(path)
-        .then((res) => {
-          this.msg = res.data.status;
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-        });
+  name: 'PdfResourceVue',
+  computed: {
+    url() {
+      return this.$store.getters.getResourceUrl;
     }
   }
 };
+
 </script>
+

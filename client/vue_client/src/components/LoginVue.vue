@@ -6,8 +6,9 @@
   >
     <v-alert
       v-model="alert"
-      type="alertType"
+      shaped
       dismissible
+      :type="alertType"
     >
       {{ alertMsg }}
     </v-alert>
@@ -169,7 +170,7 @@ export default {
 
       catch (error) {
         this.alert = true;
-        this.alertType = 'danger';
+        this.alertType = 'warning';
         this.alertMsg = error.response.data.detail;
       }
     }

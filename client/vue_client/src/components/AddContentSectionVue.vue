@@ -6,8 +6,9 @@
   >
     <v-alert
       v-model="alert"
-      type="alertType"
+      shaped
       dismissible
+      :type="alertType"
     >
       {{ alertMsg }}
     </v-alert>
@@ -101,6 +102,10 @@ export default {
     },
     saveCourse() {
       if(this.name.length === 0 || this.content  === null) {
+       
+        this.alert = true;
+        this.alertMsg = 'name and content is required';
+        this.alertType = 'warning';
         return;
       }
 

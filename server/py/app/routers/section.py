@@ -53,10 +53,10 @@ async def create_section(course_content_id: int, section: schema.SectionCreate, 
         else:
             usr_id = admin_user.id
 
-    db_section = crud.get_section_by_title(db, title=section.title)
+    # db_section = crud.get_section_by_title(db, title=section.title)
 
-    if db_section:
-        raise HTTPException(status_code=400, detail="Section already exists")
+    # if db_section:
+    #     raise HTTPException(status_code=400, detail="Section already exists")
     
     return crud.create_content_section(db=db, section=section, course_content_id=course_content_id, editor=usr_id)
 

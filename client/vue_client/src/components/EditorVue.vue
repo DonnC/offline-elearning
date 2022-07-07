@@ -4,18 +4,23 @@
       <h4> Course Content Editor </h4>
       <br><br>
     </center>
-    <!-- <v-breadcrumbs
+    <v-breadcrumbs
       :items="items"
       large
-    /> -->
-    
-    <v-alert
-      v-if="showAlert"
-      :type="alertType"
-      closable
-    >
-      {{ alertMsg }}
-    </v-alert>
+    />
+    <div>
+      <v-alert
+        v-model="showAlert"
+        class="p-3"
+        :type="alertType"
+        dismissible
+        shaped
+        dense
+      >
+        {{ alertMsg }}
+      </v-alert>
+    </div>
+
 
     <div class="p-3">
       <v-card v-if="preview">
@@ -25,10 +30,14 @@
         />
       </v-card>
 
-      <v-card v-else>
+      <v-card
+        v-else
+      >
         <vue-editor
+        
           id="editor"
           v-model="content"
+          placeholder="write or edit section notes for students here.."
           :editor-options="editorSettings"
           use-custom-image-handler
           @imageAdded="handleImageAdded"
@@ -72,7 +81,6 @@ export default {
   components: {
     VueEditor
   },
-
   data() {
     return {
       content: '',
@@ -85,25 +93,34 @@ export default {
         modules: {
           imageResize: {}
         }
-      },
-      items: [
-        {
-          text: 'Biology',
-          disabled: false,
-          href: 'breadcrumbs_dashboard'
-        },
-        {
-          text: 'Introduction',
-          disabled: false,
-          href: 'breadcrumbs_link_1'
-        },
-        {
-          text: 'intro',
-          disabled: true,
-          href: 'breadcrumbs_link_2'
-        }
-      ]
+      }
+      
     };
+  },
+  computed: {
+    items()  {
+      var course = this.$store.state.course;
+      var section = this.$store.state.section;
+      var content = this.$store.state.editor_content;
+
+      return  [
+        {
+          text: course.name,
+          disabled: true,
+          href: '#'
+        },
+        {
+          text: content,
+          disabled: true,
+          href: '#'
+        },
+        {
+          text: section.title,
+          disabled: true,
+          href: '#'
+        }
+      ];
+    }
   },
 
   mounted() {
@@ -113,11 +130,11 @@ export default {
     var content = '';
 
     if(sec_content.data == null) {
-      content = 'write course section content here..';
+      content = '';
     }
 
     else if (sec_content.data.length == 0) {
-      content = 'write course section content here..';
+      content = '';
     }
 
     else {
@@ -139,6 +156,14 @@ export default {
     saveContent: function() {
       // You have the content to save
       // 
+      if(this.content.length === 0) {
+        this.showAlert = true;
+        this.alertMsg = 'no section notes added';
+        this.alertType = 'warning';
+
+        return;
+      }
+
       this.$store.commit('SET_SECTION_DATA', this.content);
       
       console.log(this.content);
@@ -146,6 +171,10 @@ export default {
       this.$store.dispatch('updateSection');
       // show alert
       console.log('section updated');
+
+      this.showAlert = true;
+      this.alertMsg = 'section notes added successfully';
+      this.alertType = 'success';
 
       // go back 
       this.$router.back();

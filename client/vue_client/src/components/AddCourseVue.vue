@@ -6,8 +6,9 @@
   >
     <v-alert
       v-model="alert"
-      type="alertType"
+      shaped
       dismissible
+      :type="alertType"
     >
       {{ alertMsg }}
     </v-alert>
@@ -104,7 +105,7 @@ export default {
 
         else {
           this.alert = true;
-          this.alertType = 'danger';
+          this.alertType = 'warning';
           this.alertMsg = 'All fields are required';
         }
       }

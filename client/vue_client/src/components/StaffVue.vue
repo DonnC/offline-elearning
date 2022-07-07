@@ -43,7 +43,8 @@
               <v-btn
                 text
                 color="blue"
-                @click="dialog = false"
+                :href="editStaffUrl"
+                :target="_blank"
               >
                 Edit
               </v-btn>
@@ -106,11 +107,13 @@
 
 
 <script>
+import { baseUrl } from '../constants/constants.js';
 
 export default {
   data() {
     return {
-      dialog: false
+      dialog: false,
+      editStaffUrl: baseUrl + 'docs#/users/update_user_users__patch'
     };
   },
   computed: {

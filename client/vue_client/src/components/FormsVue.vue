@@ -6,12 +6,15 @@
       <v-col
         v-for="form in forms"
         :key="form.grade"
-        cols="4"
+        cols="12"
+        md="6"
+        lg="4"
+        xl="4"
       >
         <div class="p-4">
           <v-card
             height="200px"
-            elevation="6"
+            elevation="3"
             color="#5695E8"
             rounded
             outlined
@@ -19,12 +22,21 @@
             @click="updateForm(form.grade)"
           >
             <div
-              class="text-center p-4"
+              class="text-white text-center p-2"
               align="center"
             >
               <br>
               <br>
-              <p>
+              <p
+                class="
+                text-white
+        text-caption 
+        text-sm-body-2 
+        text-md-body-1 
+        text-lg-body-1 
+        text-xl-body-1 
+        text-center"
+              >
                 {{ form.name }}
               </p> 
             </div>

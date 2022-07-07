@@ -73,7 +73,7 @@
     <br>
     <h5>  Course Outline </h5>
     <LayoutColumns
-      column-count="2"
+      column-count="1"
       flow-direction="row"
       vertical-align="stretch"
       gap-x="10"
